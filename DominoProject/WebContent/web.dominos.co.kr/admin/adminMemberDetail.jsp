@@ -3,14 +3,24 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="net.member.db.*" %>
+
 
 <%
-	// 이 페이지에 접근 권한이 없는 경우 로그인 페이지로 이동시킨다.
-	// 회원가입을 완료 직후에만 이 페이지에 접근할 있다.
-	System.out.print("써져라 joinChk = " + (String)request.getAttribute("joinChk"));
-	if((String)request.getAttribute("joinChk") == null) {
-		response.sendRedirect("../global/Login.me");
+	// 관리자 계정이 아니면 접근할 수 없도록 메인페이지로 돌아가게한다.
+String idcheck = "";
+if (session.getAttribute("loginId") == null) {
+	response.sendRedirect("../Main.do");
+} else {
+	idcheck = (String) session.getAttribute("loginId");
+	if (!idcheck.equals("admin")) {
+		response.sendRedirect("../Main.do");
 	}
+}
 %>
 <!DOCTYPE HTML>
 <html lang="ko">
@@ -32,7 +42,7 @@
 <meta name="description"
 	content="도미노피자에 로그인하시면, 빠르고 간편하게 피자를 주문하실 수 있습니다." />
 <meta name="title" content="로그인- 도미노피자" />
-<title>로그인- 도미노피자</title>
+<title>도미노피자 - 관리자페이지</title>
 <meta property="og:type" content="website" />
 <meta property="og:title" content="로그인- 도미노피자" />
 <meta property="og:site_name" content="도미노피자" />
@@ -259,7 +269,7 @@
 	};
 
 	var doLogin = function() {
-		location.href = "../global/../global/Login.me";
+		location.href = "Login.me";
 	};
 
 	var myOrderDetail = function() {
@@ -271,7 +281,7 @@
 	//페이코 회원 가입
 	function goLoginPop() {
 		if (location.pathname !== '/global/login')
-			location.href = '../global/Login.me';
+			location.href = 'Login.me';
 	}
 
 	var goPresentLogin = function(gubun) {
@@ -435,7 +445,6 @@
 
 	}
 </script>
-
 <!-- Naver Anlytics 공통-->
 <script>
 	var WCSLOG_URL = location.protocol == "https:" ? "https://wcs.naver.net/wcslog.js"
@@ -487,35 +496,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 					<div class="util-nav">
 
-												<!-- **** 위쪽 로그인 배너 -->
-					<%
-					String loginId = (String)session.getAttribute("loginId");
-					String nmembername = (String)session.getAttribute("nmembername");
-					%>
+						<!-- **** 위쪽 로그인 배너 -->
+						<%
+							String loginId = (String) session.getAttribute("loginId");
+						String nmembername = (String) session.getAttribute("nmembername");
+						%>
 
-					<%if(loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너%>
-						<a href="../global/Login.me">로그인</a>
-						<a href="./JoinForm.me">회원가입</a>
-					<%} else{ //로그인 성공시 나오는 배너
-					
-						if(nmembername == null && loginId != null) {%>
-							<span style="margin-right: 10px">
-							<b><%=loginId %>님 환영합니다!</b>
-							</span> <%
-							if(loginId.equals("admin")) { //관리자 계정일 경우%>
-								<a href="../global/Logout.me">로그아웃</a>
-								<a href="../admin/AdminPage.ad">관리자페이지</a>
-							<%} else{ //일반 계정일 경우%>
-							<a href="../global/Logout.me">로그아웃</a>
-							<a href="./MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
-					<%		}
-						} else if(nmembername != null && loginId == null){ %>
-							<span style="margin-right: 10px">
-							<b><%=nmembername %>님 환영합니다!</b>
-							<a href="../global/Logout.me">로그아웃</a>
-							</span>
-					<%	}
-					}%>
+						<%
+							if (loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너
+						%>
+						<a href="./Login.me">로그인</a> <a href="../member/JoinForm.me">회원가입</a>
+						<%
+							} else { //로그인 성공시 나오는 배너
+
+						if (nmembername == null && loginId != null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=loginId%>님
+								환영합니다!</b>
+						</span>
+						<%
+							if (loginId.equals("admin")) { //관리자 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a href="./AdminPage.ad">관리자페이지</a>
+						<%
+							} else { //일반 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a
+							href="../member/MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
+						<%
+							}
+						} else if (nmembername != null && loginId == null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=nmembername%>님
+								환영합니다!</b> <a href="../global/Logout.me">로그아웃</a>
+						</span>
+						<%
+							}
+						}
+						%>
+
+
 
 						<!--2020-03-17 추가(s)-->
 						<a href="javascript:void(0);" class="lang">
@@ -532,25 +552,100 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			</div>
 
 			<!-- main 1dep menu -->
+			<script type="text/javascript"
+				src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+			<script type="text/javascript">
+				$(function() {
+					$("ul.sub").hide();
+					$("ul.menu li").hover(function() {
+						$("ul:not(:animated)", this).slideDown("fast");
+					}, function() {
+						$("ul", this).slideUp("fast");
+					});
+				});
+			</script>
+
+			<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#container2 {
+	width: 1000px;
+}
+
+ul.menu li {
+	float: left;
+	width: 250px;
+	height: 48px;
+	background-color: #fff;
+	position: relative;
+	z-index: 11;
+}
+
+ul.menu li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	line-height: 48px;
+	<!--text-indent: 30px;-->
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+
+ul.menu li a:hover {
+	font-weight: bolder;
+	background-color: #ddd;
+}
+
+ul.menu li ul.sub {
+	position: absolute;
+}
+
+ul.menu {
+	zoom: 1;
+}
+
+ul.menu:after {
+	height: 0;
+	visibility: hidden;
+	content: ".";
+	display: block;
+	clear: both;
+}
+</style>
 			<div id="gnb" class="gnb-wrap">
 				<div class="gnb-inner">
-					<ul>
-						<li class="active">
-							<a href="../goods/MenuListPizza.pro"><span>메뉴</span></a>
-						</li>
-						<li>
-							<a href="../ecoupon/CouponList.co"><span>e-쿠폰</span></a>
-						</li>
-						<li>
-							<a href="../voucher/VoucherList.vo"><span>상품권 선물</span></a>
-						</li>
-						<li>
-							<a href="../event/EventList.ev"><span>이벤트&middot;제휴</span></a>
-						</li>
-						<li>
-							<a href="SearchStore.st"><span>매장검색</span></a>
-						</li>
-					</ul>
+					<div id="container2" align="center"
+						style="position: relative;">
+
+
+						<ul class="menu">
+							<!-- "#" : 스크롤 위치를 맨 위로  -->
+							<li><a href="#">회원 및 매장 관리</a>
+								<ul class="sub">
+									<li><a href="./AdminMemberList.me">회원목록</a></li>
+									<li><a href="./AdminStoreList.st">매장목록</a></li>
+								</ul></li>
+							<li><a href="#">메뉴관리</a>
+								<ul class="sub">
+									<li><a href="./AdminPizzaAddForm.menu">피자 등록</a></li>
+								</ul></li>
+							<li><a href="#">관리자 게시판</a>
+								<ul class="sub">
+									<li><a href="?page=board.jsp">게시글 작성</a></li>
+								</ul></li>
+							<li><a href="#">판매량 통계</a>
+								<ul class="sub">
+									<li><a href="">연간통계</a></li>
+									<li><a href="">주간통계</a></li>
+									<li><a href="">일간통계</a></li>
+								</ul></li>
+						</ul>
+					</div>
 					<a href="#" class="snb-more">더보기</a>
 				</div>
 
@@ -601,245 +696,255 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		</header>
 		<!-- //header -->
 		
-		<div id="container">
-			<section id="container">
-				<div class="page-title-wrap v2" style="text-align: center">
-					<h1 class="page-title" style="font-size: 36px; padding: 50px">회원가입이 완료되었습니다.</h1>
-					<a href="../global/Login.me" class="btn-type v7" style="margin-bottom: 200px">로그인하기</a>
-				</div>
-			</section>
-		</div>
+				<!-- --------------------------------------------------------------------------------------------- -->
 		
-		<footer id="footer">
-			<div class="footer-area">
-				<div class="inner-box">
-					<div class="footer-order">
-						<i class="ico-logo2"></i> <span class="tel">1577-3082</span>
-					</div>
-
-					<ul class="footer-contact">
-						<li><a href="../contents/law.html">이용약관</a></li>
-						<li class="on"><a href="../contents/privacy.html">개인정보처리방침</a></li>
-						<li><a
-							href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">고객센터</a></li>
-						<li><a href="../company/jobListe3b0.html?type=R">인재채용</a></li>
-						<li><a href="../company/contents/chainstore1.html">가맹점모집</a></li>
-						<li><a href="../order/groupOrder.html">단체주문</a></li>
-					</ul>
-
-					<div class="footer-info">
-						<p>06229 서울특별시 강남구 언주로 315 청오디피케이㈜｜대표이사 : 오광현</p>
-						<p>사업자 등록번호: 220-81-03371｜통신판매업신고: 강남 5064호｜개인정보 보호책임자 : 이명윤</p>
-						<p>문의 : webmaster@dominos.co.kr</p>
-						<p>Copyright ⓒ Domino’s Pizza. All rights reserved.</p>
-
-						<p class="notice">청오디피케이㈜의 사전 서면동의 없이 도미노피자 사이트(PC, 모바일, 앱)의
-							일체의 정보, 콘텐츠 및 UI 등을 상업적 목적으로 전재, 전송, 스크래핑 등 무단 사용할 수 없습니다.</p>
-					</div>
-
-					<div class="footer-cont">
-						<div class="select-type language">
-							<select id="select-type">
-								<option value="/main?locale=ko">KOR</option>
-								<option value="/main?locale=en">ENG</option>
-							</select>
-						</div>
-
-						<dl class="app-box">
-							<dt>DOWNLOAD APP</dt>
-							<dd>
-								<a
-									href="https://itunes.apple.com/kr/app/dominopija-domino-pizza-korea/id371008429?mt=8"><i
-									class="ico-ios"></i>ios 앱다운로드</a> <a
-									href="https://play.google.com/store/apps/details?id=kr.co.d2.dominos"><i
-									class="ico-android">안드로이드 앱다운로드</i></a>
-							</dd>
-						</dl>
-
-						<div class="sns-box">
-							<ul>
-								<li><a href="http://blog.naver.com/dominostory"><i
-										class="ico-blog"></i>블로그</a></li>
-								<li><a href="https://www.instagram.com/dominostory/"><i
-										class="ico-insta"></i>인스타그램</a></li>
-								<li><a href="https://www.facebook.com/dominostory/"><i
-										class="ico-facebook"></i>페이스북</a></li>
-								<li><a href="https://www.youtube.com/user/dominostory3082"><i
-										class="ico-youtube"></i>유튜브</a></li>
-								<li><a href="https://twitter.com/dominostory"><i
-										class="ico-twitter"></i>트위터 </a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="awards-area">
-				<div class="inner-box">
-					<ul>
-						<li><img
-							src="../../cdn.dominos.co.kr/domino/pc/images/list_awards.png"
-							alt="">
-							<p>
-								식품안전<br>경영시스템 인증
-							</p></li>
-						<li><img
-							src="../../cdn.dominos.co.kr/domino/pc/images/list_awards2.png"
-							alt="">
-							<p>
-								지식경제부<br>우수디자인 선정
-							</p></li>
-						<li><img
-							src="../../cdn.dominos.co.kr/domino/pc/images/list_awards3.png"
-							alt="">
-							<p>
-								고객이 가장 추천하는 기업<br>피자전문점 부문 7년 연속 1위
-							</p></li>
-						<li><img
-							src="../../cdn.dominos.co.kr/domino/pc/images/list_awards4.png"
-							alt="">
-							<p>
-								2019년 한국산업 고객만족도<br>피자전문점 부문 5년 연속 1위
-							</p></li>
-						<li><img
-							src="../../cdn.dominos.co.kr/domino/pc/images/list_awards5.png"
-							alt="">
-							<p>
-								2020 프리미엄브랜드지수<br>피자전문점 부문 5년 연속 1위 수상
-							</p></li>
-						<li><img
-							src="../../cdn.dominos.co.kr/domino/pc/images/list_awards6.png"
-							alt="">
-							<p>
-								대학생 1000명이 선택한<br>2019 올해의 핫 브랜드 캠퍼스 잡앤조이 선정
-							</p></li>
-					</ul>
-				</div>
-			</div>
-		</footer>
-		<!-- //footer -->
+		<style>
+		table {
+			width : 500px;
+			border-collapse : collapse;
+		}
+		
+		table, th, td {
+			border : 1px solid black;
+		}
+		
+		th, td {
+			height : 30px;
+			text-align : center;
+			vertical-align: middle;
+		}
+	</style>
+				
+	<div id="container">
+    	<section id="content">
+    	
+    		<div id="member_info" align="center">
+    		
+    			<h1 class="page-title" style="font-size: 36px; padding: 50px;">회원 상세 정보</h1>
+	    		<table style="margin-bottom: 30px">
+	    		
+	    			<% MemberBean bean = (MemberBean)request.getAttribute("memberdetail"); %>
+	    			<tr>
+	    				<td>
+	    					이름
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_name() %>
+	    				</td>
+					</tr>
+					<tr>
+	    				<td>
+	    					아이디
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_id() %>
+	    				</td>
+					</tr>
+					<tr>
+	    				<td>
+	    					비밀번호
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_pw() %>
+	    				</td>
+					</tr>
+					<tr>
+	    				<td>
+	    					주소
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_address() %>
+	    				</td>
+					</tr>
+					<tr>
+	    				<td>
+	    					이메일
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_mail() %>
+	    				</td>
+					</tr>
+					<tr>
+	    				<td>
+	    					전화번호
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_phone() %>
+	    				</td>
+					</tr>
+					<tr>
+	    				<td>
+	    					생일
+	    				</td>
+	    				<td>
+	    					<%=bean.getMember_birthday()%>
+	    				</td>
+					</tr>
+				</table>
+    		</div>
+    	</section>
 	</div>
-	<!-- //wrap -->
+		
+		
 
-	<script>
-		(function(i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r;
-			i[r] = i[r] || function() {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date();
-			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-			a.async = 1;
-			a.src = g;
-			m.parentNode.insertBefore(a, m)
-		})(window, document, 'script',
-				'../../www.google-analytics.com/analytics.js', 'ga');
+		<!-- --------------------------------------------------------------------------------------------- -->
 
-		ga('create', 'UA-40278626-1', 'auto', {
-			'allowLinker' : true
-		});
-		ga('require', 'linker');
-		ga('linker:autoLink', [ 'cdn.dominos.co.kr' ]);
-		ga('send', 'pageview');
-	</script>
-	<!-- LOGGER(TM) TRACKING SCRIPT V.40 FOR logger.co.kr / 21550 : COMBINE TYPE / DO NOT ALTER THIS SCRIPT. -->
-	<script type="text/javascript">
-		var _TRK_LID = "21550";
-		var _L_TD = "ssl.logger.co.kr";
-		var _TRK_CDMN = ".dominos.co.kr";
-	</script>
-	<script type="text/javascript">
-		var _CDN_DOMAIN = location.protocol == "https:" ? "https://fs.bizspring.net"
-				: "http://fs.bizspring.net";
-		(function(b, s) {
-			var f = b.getElementsByTagName(s)[0], j = b.createElement(s);
-			j.async = true;
-			j.src = '../../fs.bizspring.net/fs4/bstrk.1.js';
-			f.parentNode.insertBefore(j, f);
-		})(document, 'script');
-	</script>
-	<noscript>
-		<img alt="Logger Script" width="1" height="1"
-			src="http://ssl.logger.co.kr/tracker.tsp?u=21550&amp;js=N" />
-	</noscript>
+
+	<footer id="footer">
+		<div class="footer-area">
+			<div class="inner-box">
+				<div class="footer-order">
+					<i class="ico-logo2"></i>
+					<span class="tel">1577-3082</span>
+				</div>
+	
+				<ul class="footer-contact">
+					<li><a href="../contents/law.html">이용약관</a></li>
+					<li class="on"><a href="../contents/privacy.html">개인정보처리방침</a></li>
+					<li><a href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">고객센터</a></li>
+					<li><a href="../company/jobListe3b0.html?type=R">인재채용</a></li>
+					<li><a href="../company/contents/chainstore1.html">가맹점모집</a></li>
+					<li><a href="../order/groupOrder.html">단체주문</a></li>
+				</ul>
+	
+				<div class="footer-info">
+					<p>06229 서울특별시 강남구 언주로 315 청오디피케이㈜｜대표이사 : 오광현</p>
+					<p>사업자 등록번호: 220-81-03371｜통신판매업신고: 강남 5064호｜개인정보 보호책임자 : 이명윤</p>
+					<p>문의 : webmaster@dominos.co.kr</p>
+					<p>Copyright ⓒ Domino’s Pizza. All rights reserved.</p>
+	
+					<p class="notice">청오디피케이㈜의 사전 서면동의 없이 도미노피자 사이트(PC, 모바일, 앱)의 일체의 정보, 콘텐츠 및 UI 등을 상업적 목적으로 전재, 전송, 스크래핑 등 무단 사용할 수 없습니다.</p>
+				</div>
+	
+				<div class="footer-cont">
+					<div class="select-type language">
+						<select id="select-type">
+							<option value="/main?locale=ko">KOR</option>
+							<option value="/main?locale=en">ENG</option>
+						</select>
+					</div>
+	
+					<dl class="app-box">
+						<dt>DOWNLOAD APP</dt>
+						<dd>
+							<a href="https://itunes.apple.com/kr/app/dominopija-domino-pizza-korea/id371008429?mt=8"><i class="ico-ios"></i>ios 앱다운로드</a>
+							<a href="https://play.google.com/store/apps/details?id=kr.co.d2.dominos"><i class="ico-android">안드로이드 앱다운로드</i></a>
+						</dd>
+					</dl>
+	
+					<div class="sns-box">
+						<ul>
+							<li><a href="http://blog.naver.com/dominostory"><i class="ico-blog"></i>블로그</a></li>
+							<li><a href="https://www.instagram.com/dominostory/"><i class="ico-insta"></i>인스타그램</a></li>
+							<li><a href="https://www.facebook.com/dominostory/"><i class="ico-facebook"></i>페이스북</a></li>
+							<li><a href="https://www.youtube.com/user/dominostory3082"><i class="ico-youtube"></i>유튜브</a></li>
+							<li><a href="https://twitter.com/dominostory"><i class="ico-twitter"></i>트위터 </a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="awards-area">
+			<div class="inner-box">
+				<ul>
+					<li>
+						<img src="../../cdn.dominos.co.kr/domino/pc/images/list_awards.png" alt="">
+						<p>식품안전<br>경영시스템 인증</p>
+					</li>
+					<li>
+						<img src="../../cdn.dominos.co.kr/domino/pc/images/list_awards2.png" alt="">
+						<p>지식경제부<br>우수디자인 선정</p>
+					</li>
+					<li>
+						<img src="../../cdn.dominos.co.kr/domino/pc/images/list_awards3.png" alt="">
+						<p>고객이 가장 추천하는 기업<br>피자전문점 부문 7년 연속 1위</p>
+					</li>
+					<li>
+						<img src="../../cdn.dominos.co.kr/domino/pc/images/list_awards4.png" alt="">
+						<p>2019년 한국산업 고객만족도<br>피자전문점 부문 5년 연속 1위</p>
+					</li>
+					<li>
+						<img src="../../cdn.dominos.co.kr/domino/pc/images/list_awards5.png" alt="">
+						<p>2020 프리미엄브랜드지수<br>피자전문점 부문 5년 연속 1위 수상</p>
+					</li>
+					<li>
+						<img src="../../cdn.dominos.co.kr/domino/pc/images/list_awards6.png" alt="">
+						<p>대학생 1000명이 선택한<br>2019 올해의 핫 브랜드 캠퍼스 잡앤조이 선정</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+	<!-- //footer -->
+</div><!-- //wrap -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../www.google-analytics.com/analytics.js','ga');
+  
+  ga('create', 'UA-40278626-1', 'auto', {'allowLinker': true});
+  ga('require', 'linker');
+  ga('linker:autoLink', ['cdn.dominos.co.kr'] );
+  ga('send', 'pageview');
+
+</script>
+<!-- LOGGER(TM) TRACKING SCRIPT V.40 FOR logger.co.kr / 21550 : COMBINE TYPE / DO NOT ALTER THIS SCRIPT. -->
+	<script type="text/javascript">var _TRK_LID="21550";var _L_TD="ssl.logger.co.kr";var _TRK_CDMN=".dominos.co.kr";</script>
+	<script type="text/javascript">var _CDN_DOMAIN = location.protocol == "https:" ? "https://fs.bizspring.net" : "http://fs.bizspring.net";
+	(function(b,s){var f=b.getElementsByTagName(s)[0],j=b.createElement(s);j.async=true;j.src='../../fs.bizspring.net/fs4/bstrk.1.js';f.parentNode.insertBefore(j,f);})(document,'script');</script>
+	<noscript><img alt="Logger Script" width="1" height="1" src="http://ssl.logger.co.kr/tracker.tsp?u=21550&amp;js=N" /></noscript>
 	<!-- END OF LOGGER TRACKING SCRIPT -->
-
+	
 	<!-- BS CTS TRACKING SCRIPT V.20 / 15484 : CTS / DO NOT ALTER THIS SCRIPT. -->
 	<!-- COPYRIGHT (C) 2002-2020 BIZSPRING INC. L4AD ALL RIGHTS RESERVED. -->
 	<script type="text/javascript">
-		(function(b, s, t, c, k) {
-			b[k] = s;
-			b[s] = b[s] || function() {
-				(b[s].q = b[s].q || []).push(arguments)
-			};
-			var f = t.getElementsByTagName(c)[0], j = t.createElement(c);
-			j.async = true;
-			j.src = '../../fs.bizspring.net/fs4/l4cts.v4.2.js';
-			f.parentNode.insertBefore(j, f);
-		})(window, '_tcts_m', document, 'script', 'BSAnalyticsObj');
-		_tcts_m('15484', 'BCTS');
+	(function(b,s,t,c,k){b[k]=s;b[s]=b[s]||function(){(b[s].q=b[s].q||[]).push(arguments)};  var f=t.getElementsByTagName(c)[0],j=t.createElement(c);j.async=true;j.src='../../fs.bizspring.net/fs4/l4cts.v4.2.js';f.parentNode.insertBefore(j,f);})(window,'_tcts_m',document,'script','BSAnalyticsObj');
+	_tcts_m('15484','BCTS');
 	</script>
 	<!-- END OF BS CTS TRACKING SCRIPT -->
-
+	
 	<!-- Naver Anlytics 공통-->
-	<script type="text/javascript" src="../../wcs.naver.net/wcslog.js">
-		
-	</script>
+	<script type="text/javascript" src="../../wcs.naver.net/wcslog.js"> </script>
 	<script type="text/javascript">
-		if (!wcs_add)
-			var wcs_add = {};
-		wcs_add["wa"] = "s_273c36e36e8a";
-		if (!_nasa)
-			var _nasa = {};
-		wcs.inflow("dominos.co.kr");
-		wcs_do(_nasa);
+	if (!wcs_add) var wcs_add={};
+	wcs_add["wa"] = "s_273c36e36e8a";
+	if (!_nasa) var _nasa={};
+	wcs.inflow("dominos.co.kr");
+	wcs_do(_nasa);
 	</script>
 	<!-- // Naver Anlytics 공통 -->
 
 	<!-- Google Tag Manager : dominos_web -->
-	<noscript>
-		<iframe src="http://www.googletagmanager.com/ns.html?id=GTM-TR97KL"
-			height="0" width="0" style="display: none; visibility: hidden"></iframe>
-	</noscript>
-	<script>
-		(function(w, d, s, l, i) {
-			w[l] = w[l] || [];
-			w[l].push({
-				'gtm.start' : new Date().getTime(),
-				event : 'gtm.js'
-			});
-			var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l='
-					+ l
-					: '';
-			j.async = true;
-			j.src = '../../www.googletagmanager.com/gtm5445.html?id=' + i + dl;
-			f.parentNode.insertBefore(j, f);
-		})(window, document, 'script', 'dataLayer', 'GTM-TR97KL');
-	</script>
+	<noscript><iframe src="http://www.googletagmanager.com/ns.html?id=GTM-TR97KL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'../../www.googletagmanager.com/gtm5445.html?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-TR97KL');</script>
 	<!-- End Google Tag Manager -->
 
-	<!-- 2017-05-08 // 챗봇 추가(s) -->
+<!-- 2017-05-08 // 챗봇 추가(s) -->
 
-	<!-- <div class="layer_chat">
+<!-- <div class="layer_chat">
 	<div class="dim"></div>
 	<div class="layer_content">
 		<iframe id="chatUrl" src="" frameborder="0"></iframe>
 		<a href="#" class="btn_close">닫기</a>
 	</div>
 </div> -->
-	<!-- 2017-05-08 // 챗봇 추가(e) -->
+<!-- 2017-05-08 // 챗봇 추가(e) -->
 
 </body>
 <script>
-	cookieManager.makePCID("PCID", 10);
+cookieManager.makePCID("PCID", 10);
 
-	$(".select-type.language").change(function() {
-
-		location.href = $("#select-type").val();
-	});
+$(".select-type.language").change(function() {
+	
+	location.href = $("#select-type").val();
+})
 </script>
 
 <!-- Mirrored from web.dominos.co.kr/global/login by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 20 Sep 2020 11:22:46 GMT -->
-</html>		
-		
-		
-</body>
 </html>

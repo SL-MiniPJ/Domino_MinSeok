@@ -3,15 +3,12 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
+<%@ page import="java.sql.*"%>
+<%@ page import="javax.sql.*"%>
+<%@ page import="javax.naming.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="net.member.db.*"%>
 
-<%
-	// 이 페이지에 접근 권한이 없는 경우 로그인 페이지로 이동시킨다.
-	// 회원가입을 완료 직후에만 이 페이지에 접근할 있다.
-	System.out.print("써져라 joinChk = " + (String)request.getAttribute("joinChk"));
-	if((String)request.getAttribute("joinChk") == null) {
-		response.sendRedirect("../global/Login.me");
-	}
-%>
 <!DOCTYPE HTML>
 <html lang="ko">
 
@@ -32,7 +29,7 @@
 <meta name="description"
 	content="도미노피자에 로그인하시면, 빠르고 간편하게 피자를 주문하실 수 있습니다." />
 <meta name="title" content="로그인- 도미노피자" />
-<title>로그인- 도미노피자</title>
+<title>도미노피자 - 개인정보 수정</title>
 <meta property="og:type" content="website" />
 <meta property="og:title" content="로그인- 도미노피자" />
 <meta property="og:site_name" content="도미노피자" />
@@ -467,6 +464,65 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TCXGS64');</script> -->
 <!-- GTM d2 요청작업 -->
 
+<script
+   src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+   //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+   function sample4_execDaumPostcode() {
+      new daum.Postcode(
+            {
+               oncomplete : function(data) {
+                  // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                  // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                  // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                  var roadAddr = data.roadAddress; // 도로명 주소 변수
+                  var extraRoadAddr = ''; // 참고 항목 변수
+                  // 법정 동명이 있을 경우 추가한다. (법정리는 제외)
+                  // 법정 동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                  if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                     extraRoadAddr += data.bname;
+                  }
+                  // 건물명이 있고, 공동주택일 경우 추가한다.
+                  if (data.buildingName !== '' && data.apartment === 'Y') {
+                     extraRoadAddr += (extraRoadAddr !== '' ? ', '
+                           + data.buildingName : data.buildingName);
+                  }
+                  // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                  if (extraRoadAddr !== '') {
+                     extraRoadAddr = ' (' + extraRoadAddr + ')';
+                  }
+                  // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                  document.getElementById('sample4_postcode').value = data.zonecode; // 우편번호
+                  document.getElementById("sample4_roadAddress").value = roadAddr; // 도로명
+                  document.getElementById("sample4_jibunAddress").value = data.jibunAddress; // 동 주소
+                  // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                  if (roadAddr !== '') {
+                     document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                  } else {
+                     document.getElementById("sample4_extraAddress").value = '';
+                  }
+                  var guideTextBox = document.getElementById("guide");
+                  // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                  if (data.autoRoadAddress) {
+                     var expRoadAddr = data.autoRoadAddress
+                           + extraRoadAddr;
+                     guideTextBox.innerHTML = '(예상 도로명 주소 : '
+                           + expRoadAddr + ')';
+                     guideTextBox.style.display = 'block';
+                  } else if (data.autoJibunAddress) {
+                     var expJibunAddr = data.autoJibunAddress;
+                     guideTextBox.innerHTML = '(예상 지번 주소 : '
+                           + expJibunAddr + ')';
+                     guideTextBox.style.display = 'block';
+                  } else {
+                     guideTextBox.innerHTML = '';
+                     guideTextBox.style.display = 'none';
+                  }
+               }
+            }).open();
+   }
+</script>
+
 </head>
 <body>
 	<!-- top_event_bnr -->
@@ -487,35 +543,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 					<div class="util-nav">
 
-												<!-- **** 위쪽 로그인 배너 -->
-					<%
-					String loginId = (String)session.getAttribute("loginId");
-					String nmembername = (String)session.getAttribute("nmembername");
-					%>
+						<!-- **** 위쪽 로그인 배너 -->
+						<%
+							String loginId = (String) session.getAttribute("loginId");
+						String nmembername = (String) session.getAttribute("nmembername");
+						%>
 
-					<%if(loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너%>
-						<a href="../global/Login.me">로그인</a>
-						<a href="./JoinForm.me">회원가입</a>
-					<%} else{ //로그인 성공시 나오는 배너
-					
-						if(nmembername == null && loginId != null) {%>
-							<span style="margin-right: 10px">
-							<b><%=loginId %>님 환영합니다!</b>
-							</span> <%
-							if(loginId.equals("admin")) { //관리자 계정일 경우%>
-								<a href="../global/Logout.me">로그아웃</a>
-								<a href="../admin/AdminPage.ad">관리자페이지</a>
-							<%} else{ //일반 계정일 경우%>
-							<a href="../global/Logout.me">로그아웃</a>
-							<a href="./MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
-					<%		}
-						} else if(nmembername != null && loginId == null){ %>
-							<span style="margin-right: 10px">
-							<b><%=nmembername %>님 환영합니다!</b>
-							<a href="../global/Logout.me">로그아웃</a>
-							</span>
-					<%	}
-					}%>
+						<%
+							if (loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너
+						%>
+						<a href="../global/Login.me">로그인</a> <a href="./JoinForm.me">회원가입</a>
+						<%
+							} else { //로그인 성공시 나오는 배너
+
+						if (nmembername == null && loginId != null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=loginId%>님
+								환영합니다!</b>
+						</span>
+						<%
+							if (loginId.equals("admin")) { //관리자 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a
+							href="../admin/AdminPage.ad">관리자페이지</a>
+						<%
+							} else { //일반 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a
+							href="./MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
+						<%
+							}
+						} else if (nmembername != null && loginId == null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=nmembername%>님
+								환영합니다!</b> <a href="../global/Logout.me">로그아웃</a>
+						</span>
+						<%
+							}
+						}
+						%>
 
 						<!--2020-03-17 추가(s)-->
 						<a href="javascript:void(0);" class="lang">
@@ -600,16 +666,152 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			<!-- //main 1dep menu -->
 		</header>
 		<!-- //header -->
+
+		<!-- --------------------------------------------------------------------------------------------- -->
 		
+		<% MemberBean bean = (MemberBean)request.getAttribute("memberDetail"); %>
+
 		<div id="container">
-			<section id="container">
-				<div class="page-title-wrap v2" style="text-align: center">
-					<h1 class="page-title" style="font-size: 36px; padding: 50px">회원가입이 완료되었습니다.</h1>
-					<a href="../global/Login.me" class="btn-type v7" style="margin-bottom: 200px">로그인하기</a>
+			<section id="content">
+				<div class="myinfo-wrap">
+					<div class="form">
+						<form id="membermodifyform" name="membermodifyform" action="./MemberModifyAction.me?loginId=<%=bean.getMember_id()%>" method="post">
+						<dl>
+							<dt class="center">이름</dt>
+							<dd>
+								<div class="form-item name">
+									<input type="text" id="inputName" name="inputName"
+										placeholder="이름" style="width: 200px" value=<%=bean.getMember_name() %> disabled="disabled">
+								</div>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="top">아이디</dt>
+							<dd>
+								<div class="form-item name">
+									<input type="text" name="inputId" id="inputId" maxlength="16"
+										style="width: 200px" value=<%=bean.getMember_id() %> disabled="disabled">
+								</div>
+								<div class="text-type4" id="id_alert" style="display: none;"></div>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="top">비밀번호</dt>
+							<dd class="mb">
+								<div class="form-item number">
+									<input type="password" name="inputPw" id="inputPw"
+										maxlength="16" placeholder="비밀번호" style="width: 200px">
+								</div>
+								<div class="text-type4" id="passwd_alert" style="display: none;"></div>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="top">비밀번호 확인</dt>
+							<dd class="mb">
+								<div class="form-item number">
+									<input type="password" name="inputPwchk" id="inputPwchk"
+										maxlength="16" placeholder="비밀번호" style="width: 200px">
+								</div>
+								<div class="text-type4" id="passwd_alert" style="display: none;"></div>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="center">생년월일</dt>
+							<dd>
+								<% String[] birth = bean.getMember_birthday().split("/"); %>
+								<div class="form-item birth">
+									<input type="text" id="byear" name="byear" class="selected"
+										style="width: 100px" value=<%=birth[0] %> disabled="disabled">년 <input type="text" id="bmonth"
+										name="bmonth" class="selected" style="width: 100px" value=<%=birth[1] %> disabled="disabled">월
+									<input type="text" id="bday" name="bday" class="selected"
+										style="width: 100px" value=<%=birth[2] %> disabled="disabled">일
+								</div>
+						</dl>
+						<dl>
+							<dt class="top">휴대전화</dt>
+							<dd>
+								<div class="form-group v2">
+									<div class="form-item">
+										<%String[] phone = bean.getMember_phone().split("-"); %>
+										<input type="text" name="tel1" id="tel1" maxlength="4"
+											title="휴대전화번호" value=<%=phone[0] %>> <input type="text" name="tel2"
+											id="tel2" maxlength="4" title="휴대전화번호" value=<%=phone[1] %>> <input
+											type="text" name="tel3" id="tel3" maxlength="4"
+											title="휴대전화번호" value=<%=phone[2] %>>
+									</div>
+								</div>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="center">이메일</dt>
+							<dd>
+								<div calss="form-group v2">
+									<div class="form-item e-mail">
+										<input type="text" name="email" id="email"
+											style="width: 400px" value=<%=bean.getMember_mail() %> disabled="disabled">
+									</div>
+									<div class="text-type4" id="email_alert"
+										style="dispplay: none;"></div>
+								</div>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="center">주소</dt>
+							<dd>
+								<div class="form-group v2">
+									<div class="form-item address">
+										<input type="text" id="sample4_postcode" placeholder="우편번호"
+											name="sample4_postcode"> <a
+											href="javaScript:sample4_execDaumPostcode();"
+											class="btn-type v7">우편번호찾기</a> <br>
+									</div>
+								</div>
+							</dd>
+
+							<dt class="center"></dt>
+							<dd>
+								<div class="form-group v2">
+									<div class="form-item address">
+										<input type="text" id="sample4_roadAddress"
+											placeholder="도로명주소" name="sample4_roadAddress"
+											style="width: 200px"> <input type="text"
+											id="sample4_jibunAddress" placeholder="지번주소"
+											name="sample4_jibunAddress" style="width: 200px">
+									</div>
+								</div>
+							</dd>
+
+							<dt class="center"></dt>
+							<dd>
+								<div class="form-group v2">
+									<div class="form-item address">
+										<input type="text" id="sample4_detailAddress"
+											placeholder="상세주소" name="sample4_detailAddress"
+											style="width: 200px"> <input type="text"
+											id="sample4_extraAddress" placeholder="참고항목"
+											name="sample4_extraAddress" style="width: 200px">
+									</div>
+								</div>
+							</dd>
+						</dl>
+					</form>
+					</div>
+				</div>
+				<div class="btn-wrap">
+					<a href="javaScript: modifyMember()" class="btn-type v6" style="margin-bottom: 100px">정보 수정</a>
 				</div>
 			</section>
 		</div>
 		
+		<script>
+			function modifyMember() {
+				var membermodifyform = document.getElementById("membermodifyform");
+				membermodifyform.submit();
+			}
+		</script>
+
+		<!-- --------------------------------------------------------------------------------------------- -->
+
 		<footer id="footer">
 			<div class="footer-area">
 				<div class="inner-box">
@@ -838,8 +1040,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 
 <!-- Mirrored from web.dominos.co.kr/global/login by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 20 Sep 2020 11:22:46 GMT -->
-</html>		
-		
-		
+</html>
+
+
 </body>
 </html>

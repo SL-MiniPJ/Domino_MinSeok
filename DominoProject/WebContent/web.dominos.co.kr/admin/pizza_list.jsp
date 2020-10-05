@@ -1,16 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="net.product.db.*"%>
 <%
-	request.setCharacterEncoding("UTF-8");
-%>
-
-<%
-	// 이 페이지에 접근 권한이 없는 경우 로그인 페이지로 이동시킨다.
-	// 회원가입을 완료 직후에만 이 페이지에 접근할 있다.
-	System.out.print("써져라 joinChk = " + (String)request.getAttribute("joinChk"));
-	if((String)request.getAttribute("joinChk") == null) {
-		response.sendRedirect("../global/Login.me");
+	// 관리자 계정이 아니면 접근할 수 없도록 메인페이지로 돌아가게한다.
+String idcheck = "";
+if (session.getAttribute("loginId") == null) {
+	response.sendRedirect("../Main.do");
+} else {
+	idcheck = (String) session.getAttribute("loginId");
+	if (!idcheck.equals("admin")) {
+		response.sendRedirect("../Main.do");
 	}
+}
 %>
 <!DOCTYPE HTML>
 <html lang="ko">
@@ -32,7 +34,7 @@
 <meta name="description"
 	content="도미노피자에 로그인하시면, 빠르고 간편하게 피자를 주문하실 수 있습니다." />
 <meta name="title" content="로그인- 도미노피자" />
-<title>로그인- 도미노피자</title>
+<title>도미노피자 - 관리자페이지</title>
 <meta property="og:type" content="website" />
 <meta property="og:title" content="로그인- 도미노피자" />
 <meta property="og:site_name" content="도미노피자" />
@@ -259,7 +261,7 @@
 	};
 
 	var doLogin = function() {
-		location.href = "../global/../global/Login.me";
+		location.href = "Login.me";
 	};
 
 	var myOrderDetail = function() {
@@ -271,7 +273,7 @@
 	//페이코 회원 가입
 	function goLoginPop() {
 		if (location.pathname !== '/global/login')
-			location.href = '../global/Login.me';
+			location.href = 'Login.me';
 	}
 
 	var goPresentLogin = function(gubun) {
@@ -435,7 +437,6 @@
 
 	}
 </script>
-
 <!-- Naver Anlytics 공통-->
 <script>
 	var WCSLOG_URL = location.protocol == "https:" ? "https://wcs.naver.net/wcslog.js"
@@ -487,35 +488,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 					<div class="util-nav">
 
-												<!-- **** 위쪽 로그인 배너 -->
-					<%
-					String loginId = (String)session.getAttribute("loginId");
-					String nmembername = (String)session.getAttribute("nmembername");
-					%>
+						<!-- **** 위쪽 로그인 배너 -->
+						<%
+							String loginId = (String) session.getAttribute("loginId");
+						String nmembername = (String) session.getAttribute("nmembername");
+						%>
 
-					<%if(loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너%>
-						<a href="../global/Login.me">로그인</a>
-						<a href="./JoinForm.me">회원가입</a>
-					<%} else{ //로그인 성공시 나오는 배너
-					
-						if(nmembername == null && loginId != null) {%>
-							<span style="margin-right: 10px">
-							<b><%=loginId %>님 환영합니다!</b>
-							</span> <%
-							if(loginId.equals("admin")) { //관리자 계정일 경우%>
-								<a href="../global/Logout.me">로그아웃</a>
-								<a href="../admin/AdminPage.ad">관리자페이지</a>
-							<%} else{ //일반 계정일 경우%>
-							<a href="../global/Logout.me">로그아웃</a>
-							<a href="./MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
-					<%		}
-						} else if(nmembername != null && loginId == null){ %>
-							<span style="margin-right: 10px">
-							<b><%=nmembername %>님 환영합니다!</b>
-							<a href="../global/Logout.me">로그아웃</a>
-							</span>
-					<%	}
-					}%>
+						<%
+							if (loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너
+						%>
+						<a href="./Login.me">로그인</a> <a href="../member/JoinForm.me">회원가입</a>
+						<%
+							} else { //로그인 성공시 나오는 배너
+
+						if (nmembername == null && loginId != null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=loginId%>님
+								환영합니다!</b>
+						</span>
+						<%
+							if (loginId.equals("admin")) { //관리자 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a href="./AdminPage.ad">관리자페이지</a>
+						<%
+							} else { //일반 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a
+							href="../member/MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
+						<%
+							}
+						} else if (nmembername != null && loginId == null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=nmembername%>님
+								환영합니다!</b> <a href="../global/Logout.me">로그아웃</a>
+						</span>
+						<%
+							}
+						}
+						%>
+
+
 
 						<!--2020-03-17 추가(s)-->
 						<a href="javascript:void(0);" class="lang">
@@ -532,84 +544,183 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			</div>
 
 			<!-- main 1dep menu -->
+			<script type="text/javascript"
+				src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+			<script type="text/javascript">
+				$(function() {
+					$("ul.sub").hide();
+					$("ul.menu li").hover(function() {
+						$("ul:not(:animated)", this).slideDown("fast");
+					}, function() {
+						$("ul", this).slideUp("fast");
+					});
+				});
+			</script>
+
+			<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#container2 {
+	width: 1000px;
+}
+
+ul.menu li {
+	float: left;
+	width: 250px;
+	height: 48px;
+	background-color: #fff;
+	position: relative;
+	z-index: 11;
+}
+
+ul.menu li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	line-height: 48px; <!--
+	text-indent: 30px; -->
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+
+ul.menu li a:hover {
+	font-weight: bolder;
+	background-color: #ddd;
+}
+
+ul.menu li ul.sub {
+	position: absolute;
+}
+
+ul.menu {
+	zoom: 1;
+}
+
+ul.menu:after {
+	height: 0;
+	visibility: hidden;
+	content: ".";
+	display: block;
+	clear: both;
+}
+</style>
 			<div id="gnb" class="gnb-wrap">
 				<div class="gnb-inner">
-					<ul>
-						<li class="active">
-							<a href="../goods/MenuListPizza.pro"><span>메뉴</span></a>
-						</li>
-						<li>
-							<a href="../ecoupon/CouponList.co"><span>e-쿠폰</span></a>
-						</li>
-						<li>
-							<a href="../voucher/VoucherList.vo"><span>상품권 선물</span></a>
-						</li>
-						<li>
-							<a href="../event/EventList.ev"><span>이벤트&middot;제휴</span></a>
-						</li>
-						<li>
-							<a href="SearchStore.st"><span>매장검색</span></a>
-						</li>
-					</ul>
-					<a href="#" class="snb-more">더보기</a>
-				</div>
+					<div id="container2" align="center" style="position: relative;">
 
-				<div class="snb-wrap">
-					<div class="inner-box">
-						<div class="mnu-wrap">
-							<div class="mnu-box">
-								<a href="../event/mania.html">도미노 서비스</a>
-								<ul>
-									<li><a href="../event/mania.html">매니아 혜택</a></li>
-									<li><a href="../goods/dominosMoment.html">도미노 모멘트</a></li>
-									<li><a href="../quickOrder/index.html">퀵 오더</a></li>
-									<li><a href="../order/groupOrder.html">단체주문 서비스</a></li>
-								</ul>
-							</div>
-							<div class="mnu-box">
-								<a href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">고객센터</a>
-								<ul>
-									<li><a
-										href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">자주하는
-											질문</a></li>
-									<li><a href="../bbs/qnaForm.html">온라인 신문고</a></li>
-								</ul>
-							</div>
-							<div class="mnu-box">
-								<a href="../company/contents/overview.html">회사소개</a>
-								<ul>
-									<li><a href="../company/contents/overview.html">한국도미노피자</a></li>
-									<li><a href="../company/tvcfList.html">광고갤러리</a></li>
-									<li><a href="../company/contents/society.html">사회공헌활동</a></li>
-									<li><a href="../company/contents/chainstore1.html">가맹점
-											모집</a></li>
-									<li><a href="../company/jobListe3b0.html?type=R">인재채용</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="notice-box">
-							<a href="../bbs/newsList91ef.html?type=N">공지사항</a>
-							<ul>
-								<li><a href="../bbs/newsList91ef.html?type=N">도미노뉴스</a></li>
-								<li><a href="../bbs/newsList0e42.html?type=P">보도자료</a></li>
-							</ul>
-						</div>
+
+						<ul class="menu">
+							<!-- "#" : 스크롤 위치를 맨 위로  -->
+							<li><a href="#">회원 및 매장 관리</a>
+								<ul class="sub">
+									<li><a href="./AdminMemberList.me">회원목록</a></li>
+									<li><a href="./AdminStoreList.st">매장목록</a></li>
+								</ul></li>
+							<li><a href="#">메뉴관리</a>
+								<ul class="sub">
+									<li><a href="./Product.pro">메뉴 관리</a></li>
+								</ul></li>
+							<li><a href="#">관리자 게시판</a>
+								<ul class="sub">
+									<li><a href="./AdminNewsList.bo">뉴스 관리</a></li>
+									<li><a href="./AdminIssueList.bo">보도자료 관리</a></li>
+									<li><a href="./AdminEventList.bo">이벤트 관리</a></li>
+									<li><a href="./AdminAllianceList.bo">제휴 관리</a></li>
+									<li><a href="./AdminCouponList.bo">쿠폰 관리</a></li>
+								</ul></li>
+							<li><a href="#">판매량 통계</a>
+								<ul class="sub">
+									<li><a href="">연간통계</a></li>
+									<li><a href="">주간통계</a></li>
+									<li><a href="">일간통계</a></li>
+								</ul></li>
+						</ul>
 					</div>
 				</div>
 			</div>
 			<!-- //main 1dep menu -->
 		</header>
 		<!-- //header -->
-		
+
 		<div id="container">
-			<section id="container">
-				<div class="page-title-wrap v2" style="text-align: center">
-					<h1 class="page-title" style="font-size: 36px; padding: 50px">회원가입이 완료되었습니다.</h1>
-					<a href="../global/Login.me" class="btn-type v7" style="margin-bottom: 200px">로그인하기</a>
-				</div>
+			<section id="content">
+				<style>
+table {
+	width: 1300px;
+	text-align: center;
+	height: 30px;
+	margin-top: 20px;
+	margin-botton: 100px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+th {
+	height: 30px;
+}
+</style>
+
+				<div align="center">
+					<h1 class="page-title"
+						style="font-size: 36px; width: 80%; text-align: left; padding: 50px">메뉴
+						관리</h1>
+					<hr style="width: 80%; border-left-width: thick;">
+				<table border=1 style="border-collapse: collapse;">
+					<tr>
+						<th><b>code</b></th>
+						<th>이름</th>
+						<th>가격</th>
+						<th>1회분 기준</th>
+						<th>1회분 중량</th>
+						<th>총 중량</th>
+						<th>열량</th>
+						<th>단백질</th>
+						<th>포화 지방</th>
+						<th>나트륨</th>
+						<th>당류</th>
+						<th>이미지 미리보기</th>
+						<th>삭제</th>
+					</tr>
+
+					<%
+						List list = (List) request.getAttribute("list");
+
+					for (int i = 0; i < list.size(); i++) {
+
+						ProductBean product = (ProductBean) list.get(i);
+					%>
+					<tr>
+						<td><%=product.getPizza_code()%></td>
+						<td><%=product.getPizza_name()%></td>
+						<td><%=product.getPizza_price()%></td>
+						<td><%=product.getStandard()%></td>
+						<td><%=product.getWeight()%></td>
+						<td><%=product.getTotal_weight()%></td>
+						<td><%=product.getCalorie()%></td>
+						<td><%=product.getProtein()%></td>
+						<td><%=product.getSaturated_fat()%></td>
+						<td><%=product.getSalt()%></td>
+						<td><%=product.getSugars()%></td>
+						<td><a href="../../pizza_image/<%=product.getPizza_image()%>"><%=product.getPizza_image()%></a></td>
+						<td><a
+							href="./PizzaDeleteAction.pro?pizza_code=<%=product.getPizza_code()%>">피자
+								삭제</a></td>
+					</tr>
+					<%
+						}
+					%>
+				</table>
+			</div>
 			</section>
 		</div>
-		
+
+		<!-- //container -->
+
 		<footer id="footer">
 			<div class="footer-area">
 				<div class="inner-box">
@@ -838,8 +949,4 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 
 <!-- Mirrored from web.dominos.co.kr/global/login by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 20 Sep 2020 11:22:46 GMT -->
-</html>		
-		
-		
-</body>
 </html>

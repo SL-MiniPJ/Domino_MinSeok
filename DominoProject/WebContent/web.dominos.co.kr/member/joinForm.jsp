@@ -586,15 +586,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			<div id="gnb" class="gnb-wrap">
 				<div class="gnb-inner">
 					<ul>
-						<li class="active"><a
-							href="../goods/list985d.html?dsp_ctgr=C0101"><span>메뉴</span></a>
+						<li class="active">
+							<a href="../goods/MenuListPizza.pro"><span>메뉴</span></a>
 						</li>
-						<li><a href="../ecoupon/index.html"><span>e-쿠폰</span></a></li>
-						<li><a href="../voucher/listdcb9.html?gubun=M"><span>상품권
-									선물</span></a></li>
-						<li><a href="../event/list6849.html?gubun=E0200"><span>이벤트&middot;제휴</span></a>
+						<li>
+							<a href="../ecoupon/CouponList.co"><span>e-쿠폰</span></a>
 						</li>
-						<li><a href="../branch.html"><span>매장검색</span></a></li>
+						<li>
+							<a href="../voucher/VoucherList.vo"><span>상품권 선물</span></a>
+						</li>
+						<li>
+							<a href="../event/EventList.ev"><span>이벤트&middot;제휴</span></a>
+						</li>
+						<li>
+							<a href="SearchStore.st"><span>매장검색</span></a>
+						</li>
 					</ul>
 					<a href="#" class="snb-more">더보기</a>
 				</div>

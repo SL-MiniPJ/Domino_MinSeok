@@ -3,14 +3,23 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
+<%@ page import="java.sql.*"%>
+<%@ page import="javax.sql.*"%>
+<%@ page import="javax.naming.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="net.store.db.*"%>
 
 <%
-	// 이 페이지에 접근 권한이 없는 경우 로그인 페이지로 이동시킨다.
-	// 회원가입을 완료 직후에만 이 페이지에 접근할 있다.
-	System.out.print("써져라 joinChk = " + (String)request.getAttribute("joinChk"));
-	if((String)request.getAttribute("joinChk") == null) {
-		response.sendRedirect("../global/Login.me");
+	// 관리자 계정이 아니면 접근할 수 없도록 메인페이지로 돌아가게한다.
+String idcheck = "";
+if (session.getAttribute("loginId") == null) {
+	response.sendRedirect("../Main.do");
+} else {
+	idcheck = (String) session.getAttribute("loginId");
+	if (!idcheck.equals("admin")) {
+		response.sendRedirect("../Main.do");
 	}
+}
 %>
 <!DOCTYPE HTML>
 <html lang="ko">
@@ -32,7 +41,7 @@
 <meta name="description"
 	content="도미노피자에 로그인하시면, 빠르고 간편하게 피자를 주문하실 수 있습니다." />
 <meta name="title" content="로그인- 도미노피자" />
-<title>로그인- 도미노피자</title>
+<title>도미노피자 - 관리자페이지</title>
 <meta property="og:type" content="website" />
 <meta property="og:title" content="로그인- 도미노피자" />
 <meta property="og:site_name" content="도미노피자" />
@@ -259,7 +268,7 @@
 	};
 
 	var doLogin = function() {
-		location.href = "../global/../global/Login.me";
+		location.href = "Login.me";
 	};
 
 	var myOrderDetail = function() {
@@ -271,7 +280,7 @@
 	//페이코 회원 가입
 	function goLoginPop() {
 		if (location.pathname !== '/global/login')
-			location.href = '../global/Login.me';
+			location.href = 'Login.me';
 	}
 
 	var goPresentLogin = function(gubun) {
@@ -435,7 +444,6 @@
 
 	}
 </script>
-
 <!-- Naver Anlytics 공통-->
 <script>
 	var WCSLOG_URL = location.protocol == "https:" ? "https://wcs.naver.net/wcslog.js"
@@ -487,35 +495,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 					<div class="util-nav">
 
-												<!-- **** 위쪽 로그인 배너 -->
-					<%
-					String loginId = (String)session.getAttribute("loginId");
-					String nmembername = (String)session.getAttribute("nmembername");
-					%>
+						<!-- **** 위쪽 로그인 배너 -->
+						<%
+							String loginId = (String) session.getAttribute("loginId");
+						String nmembername = (String) session.getAttribute("nmembername");
+						%>
 
-					<%if(loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너%>
-						<a href="../global/Login.me">로그인</a>
-						<a href="./JoinForm.me">회원가입</a>
-					<%} else{ //로그인 성공시 나오는 배너
-					
-						if(nmembername == null && loginId != null) {%>
-							<span style="margin-right: 10px">
-							<b><%=loginId %>님 환영합니다!</b>
-							</span> <%
-							if(loginId.equals("admin")) { //관리자 계정일 경우%>
-								<a href="../global/Logout.me">로그아웃</a>
-								<a href="../admin/AdminPage.ad">관리자페이지</a>
-							<%} else{ //일반 계정일 경우%>
-							<a href="../global/Logout.me">로그아웃</a>
-							<a href="./MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
-					<%		}
-						} else if(nmembername != null && loginId == null){ %>
-							<span style="margin-right: 10px">
-							<b><%=nmembername %>님 환영합니다!</b>
-							<a href="../global/Logout.me">로그아웃</a>
-							</span>
-					<%	}
-					}%>
+						<%
+							if (loginId == null && nmembername == null) { //로그인 안했을 때 나오는 배너
+						%>
+						<a href="./Login.me">로그인</a> <a href="../member/JoinForm.me">회원가입</a>
+						<%
+							} else { //로그인 성공시 나오는 배너
+
+						if (nmembername == null && loginId != null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=loginId%>님
+								환영합니다!</b>
+						</span>
+						<%
+							if (loginId.equals("admin")) { //관리자 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a href="./AdminPage.ad">관리자페이지</a>
+						<%
+							} else { //일반 계정일 경우
+						%>
+						<a href="../global/Logout.me">로그아웃</a> <a
+							href="../member/MemberPage.me?loginId=<%=loginId%>">마이페이지</a>
+						<%
+							}
+						} else if (nmembername != null && loginId == null) {
+						%>
+						<span style="margin-right: 10px"> <b><%=nmembername%>님
+								환영합니다!</b> <a href="../global/Logout.me">로그아웃</a>
+						</span>
+						<%
+							}
+						}
+						%>
+
+
 
 						<!--2020-03-17 추가(s)-->
 						<a href="javascript:void(0);" class="lang">
@@ -532,25 +551,100 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			</div>
 
 			<!-- main 1dep menu -->
+			<script type="text/javascript"
+				src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+			<script type="text/javascript">
+				$(function() {
+					$("ul.sub").hide();
+					$("ul.menu li").hover(function() {
+						$("ul:not(:animated)", this).slideDown("fast");
+					}, function() {
+						$("ul", this).slideUp("fast");
+					});
+				});
+			</script>
+
+			<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#container2 {
+	width: 1000px;
+}
+
+ul.menu li {
+	float: left;
+	width: 250px;
+	height: 48px;
+	background-color: #fff;
+	position: relative;
+	z-index: 11;
+}
+
+ul.menu li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	line-height: 48px;
+	<!--text-indent: 30px;-->
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+
+ul.menu li a:hover {
+	font-weight: bolder;
+	background-color: #ddd;
+}
+
+ul.menu li ul.sub {
+	position: absolute;
+}
+
+ul.menu {
+	zoom: 1;
+}
+
+ul.menu:after {
+	height: 0;
+	visibility: hidden;
+	content: ".";
+	display: block;
+	clear: both;
+}
+</style>
 			<div id="gnb" class="gnb-wrap">
 				<div class="gnb-inner">
-					<ul>
-						<li class="active">
-							<a href="../goods/MenuListPizza.pro"><span>메뉴</span></a>
-						</li>
-						<li>
-							<a href="../ecoupon/CouponList.co"><span>e-쿠폰</span></a>
-						</li>
-						<li>
-							<a href="../voucher/VoucherList.vo"><span>상품권 선물</span></a>
-						</li>
-						<li>
-							<a href="../event/EventList.ev"><span>이벤트&middot;제휴</span></a>
-						</li>
-						<li>
-							<a href="SearchStore.st"><span>매장검색</span></a>
-						</li>
-					</ul>
+					<div id="container2" align="center"
+						style="position: relative;">
+
+
+						<ul class="menu">
+							<!-- "#" : 스크롤 위치를 맨 위로  -->
+							<li><a href="#">회원 및 매장 관리</a>
+								<ul class="sub">
+									<li><a href="./AdminMemberList.me">회원목록</a></li>
+									<li><a href="./AdminStoreList.st">매장목록</a></li>
+								</ul></li>
+							<li><a href="#">메뉴관리</a>
+								<ul class="sub">
+									<li><a href="./AdminPizzaAddForm.menu">피자 등록</a></li>
+								</ul></li>
+							<li><a href="#">관리자 게시판</a>
+								<ul class="sub">
+									<li><a href="?page=board.jsp">게시글 작성</a></li>
+								</ul></li>
+							<li><a href="#">판매량 통계</a>
+								<ul class="sub">
+									<li><a href="">연간통계</a></li>
+									<li><a href="">주간통계</a></li>
+									<li><a href="">일간통계</a></li>
+								</ul></li>
+						</ul>
+					</div>
 					<a href="#" class="snb-more">더보기</a>
 				</div>
 
@@ -600,16 +694,240 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			<!-- //main 1dep menu -->
 		</header>
 		<!-- //header -->
-		
+
+		<script
+			src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+			//본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+			function sample4_execDaumPostcode() {
+				new daum.Postcode(
+						{
+							oncomplete : function(data) {
+								// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+								// 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+								// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+								var roadAddr = data.roadAddress; // 도로명 주소 변수
+								var extraRoadAddr = ''; // 참고 항목 변수
+								// 법정 동명이 있을 경우 추가한다. (법정리는 제외)
+								// 법정 동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+								if (data.bname !== ''
+										&& /[동|로|가]$/g.test(data.bname)) {
+									extraRoadAddr += data.bname;
+								}
+								// 건물명이 있고, 공동주택일 경우 추가한다.
+								if (data.buildingName !== ''
+										&& data.apartment === 'Y') {
+									extraRoadAddr += (extraRoadAddr !== '' ? ', '
+											+ data.buildingName
+											: data.buildingName);
+								}
+								// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+								if (extraRoadAddr !== '') {
+									extraRoadAddr = ' (' + extraRoadAddr + ')';
+								}
+								// 우편번호와 주소 정보를 해당 필드에 넣는다.
+								document.getElementById('sample4_postcode').value = data.zonecode; // 우편번호
+								document.getElementById("sample4_roadAddress").value = roadAddr; // 도로명
+								document.getElementById("sample4_jibunAddress").value = data.jibunAddress; // 동 주소
+								// 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+								if (roadAddr !== '') {
+									document
+											.getElementById("sample4_extraAddress").value = extraRoadAddr;
+								} else {
+									document
+											.getElementById("sample4_extraAddress").value = '';
+								}
+								var guideTextBox = document
+										.getElementById("guide");
+								// 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+								if (data.autoRoadAddress) {
+									var expRoadAddr = data.autoRoadAddress
+											+ extraRoadAddr;
+									guideTextBox.innerHTML = '(예상 도로명 주소 : '
+											+ expRoadAddr + ')';
+									guideTextBox.style.display = 'block';
+								} else if (data.autoJibunAddress) {
+									var expJibunAddr = data.autoJibunAddress;
+									guideTextBox.innerHTML = '(예상 지번 주소 : '
+											+ expJibunAddr + ')';
+									guideTextBox.style.display = 'block';
+								} else {
+									guideTextBox.innerHTML = '';
+									guideTextBox.style.display = 'none';
+								}
+							}
+						}).open();
+			}
+		</script>
+
+		<!-- 매장 등록 폼 -->
 		<div id="container">
-			<section id="container">
-				<div class="page-title-wrap v2" style="text-align: center">
-					<h1 class="page-title" style="font-size: 36px; padding: 50px">회원가입이 완료되었습니다.</h1>
-					<a href="../global/Login.me" class="btn-type v7" style="margin-bottom: 200px">로그인하기</a>
+			<section id="content">
+				<div class="myinfo-wrap">
+					<div class="form">
+						<%
+							request.setCharacterEncoding("UTF-8");
+							
+							StoreBean bean = (StoreBean)request.getAttribute("storedetail");
+							String s_name = bean.getStore_name();
+							String s_loc = bean.getStore_location();
+							String[] s_tel = bean.getStore_phone().split("-");
+							String s_opening = bean.getStore_opening();
+							String s_park = bean.getStore_park();
+							String s_other = bean.getStore_other();
+							int s_online = bean.getStore_online();
+							int s_offline = bean.getStore_offline();
+							int s_sale = bean.getStore_sale();
+						%>
+						
+						<form name="storeAddForm" id="storeModifyForm"
+							action="./AdminStoreModifyAction.st?store_code=<%=Integer.parseInt(request.getParameter("store_code")) %>" method="post">
+							<dl>
+								<dt class="center">매장이름</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreName" name="inputStoreName"
+											placeholder="매장 이름" style="width: 200px" value=<%=s_name%>>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">주소</dt>
+								<dd>
+								<div class="form-group v2">
+									<div class="form-item address">
+										<input type="text" id="sample4_postcode" placeholder="우편번호"
+											name="sample4_postcode" style="width: 200px"> <a
+											href="javaScript:sample4_execDaumPostcode();"
+											class="btn-type v7">우편번호찾기</a> <br>
+									</div>
+								</div>
+							</dd>
+
+							<dt class="center"></dt>
+							<dd>
+								<div class="form-group v2">
+									<div class="form-item address">
+										<input type="text" id="sample4_roadAddress"
+											placeholder="도로명주소" name="sample4_roadAddress"
+											style="width: 200px"> <input type="text"
+											id="sample4_jibunAddress" placeholder="지번주소"
+											name="sample4_jibunAddress" style="width: 200px">
+									</div>
+								</div>
+							</dd>
+
+							<dt class="center"></dt>
+							<dd>
+								<div class="form-group v2">
+									<div class="form-item address">
+										<input type="text" id="sample4_detailAddress"
+											placeholder="상세주소" name="sample4_detailAddress"
+											style="width: 200px"> <input type="text"
+											id="sample4_extraAddress" placeholder="참고항목"
+											name="sample4_extraAddress" style="width: 200px">
+									</div>
+								</div>
+							</dd>
+							</dl>
+							<dl>
+								<dt class="center">매장 위치</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreLocation"
+											name="inputStoreLocation"
+											placeholder="ex)포이사거리 삼호물산 빌딩 에서 양재대로 방면으로 70M 직진 "
+											style="width: 600px" value=<%=s_loc %>>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="top">매장 전화번호</dt>
+								<dd>
+									<div class="form-group v2">
+										<div class="form-item">
+											<input type="text" name="tel1" id="tel1" maxlength="4"
+												title="매장전화번호" value=<%=s_tel[0] %>> <input type="text" name="tel2"
+												id="tel2" maxlength="4" title="매장전화번호" value=<%=s_tel[1] %>> <input
+												type="text" name="tel3" id="tel3" maxlength="4"
+												title="매장전화번호" value=<%=s_tel[2] %>>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">개점일</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreOpening"
+											name="inputStoreOpening" placeholder="ex)2020-01-01"
+											style="width: 200px" value=<%=s_opening %>>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">주차정보</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStorePark" name="inputStorePark"
+											placeholder="ex)주차가능" style="width: 200px" value=<%=s_park %>>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">특이사항</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreOther" name="inputStoreOther"
+											placeholder="ex)단체석 완비" style="width: 200px" value=<%=s_other %>>
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">온라인 방문포장</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreOnline"
+											name="inputStoreOnline" placeholder="ex)30"
+											style="width: 100px" value=<%=s_online %>> % 할인
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">오프라인 방문포장</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreOffline"
+											name="inputStoreOffline" placeholder="ex)30"
+											style="width: 100px" value=<%=s_offline %>> % 할인
+									</div>
+								</dd>
+							</dl>
+							<dl>
+								<dt class="center">특별 할인</dt>
+								<dd>
+									<div class="form-item name">
+										<input type="text" id="inputStoreSale" name="inputStoreSale"
+											placeholder="ex)30" style="width: 100px" value=<%=s_sale %>> % 할인
+									</div>
+								</dd>
+							</dl>
+						</form>
+					</div>
+				</div>
+				<div class="btn-wrap">
+					<a href="javaScript: modifyStore()" class="btn-type v6" style="margin-bottom: 100px">정보 수정</a>
 				</div>
 			</section>
 		</div>
-		
+
+		<script>
+			function modifyStore() {
+				var storeModifyForm = document.getElementById("storeModifyForm");
+				storeModifyForm.submit();
+			}
+		</script>
+
 		<footer id="footer">
 			<div class="footer-area">
 				<div class="inner-box">
@@ -834,12 +1152,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	$(".select-type.language").change(function() {
 
 		location.href = $("#select-type").val();
-	});
+	})
 </script>
 
 <!-- Mirrored from web.dominos.co.kr/global/login by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 20 Sep 2020 11:22:46 GMT -->
-</html>		
-		
-		
-</body>
 </html>

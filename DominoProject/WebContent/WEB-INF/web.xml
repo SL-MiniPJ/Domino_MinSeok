@@ -30,13 +30,58 @@
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 	
-		<servlet>
+	<servlet>
 		<servlet-name>DominoMemberFrontController</servlet-name>
 		<servlet-class>net.member.action.DominoMemberFrontController</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DominoMemberFrontController</servlet-name>
 		<url-pattern>*.me</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DominoStoreFrontController</servlet-name>
+		<servlet-class>net.store.action.DominoStoreFrontController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DominoStoreFrontController</servlet-name>
+		<url-pattern>*.st</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>DominoAdminFrontController</servlet-name>
+		<servlet-class>net.admin.action.DominoAdminFrontController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DominoAdminFrontController</servlet-name>
+		<url-pattern>*.ad</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DominoMenuFrontController</servlet-name>
+		<servlet-class>net.menu.action.DominoMenuFrontController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DominoMenuFrontController</servlet-name>
+		<url-pattern>*.menu</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DominoBoardFrontController</servlet-name>
+		<servlet-class>net.board.action.DominoBoardFrontController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DominoBoardFrontController</servlet-name>
+		<url-pattern>*.bo</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ProductController</servlet-name>
+		<servlet-class>net.product.action.ProductController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProductController</servlet-name>
+		<url-pattern>*.pro</url-pattern>
 	</servlet-mapping>
 
 </web-app>

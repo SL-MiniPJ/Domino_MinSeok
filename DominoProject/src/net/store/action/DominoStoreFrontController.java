@@ -1,4 +1,4 @@
-package net.member.action;
+package net.store.action;
 
 import java.io.IOException;
 
@@ -8,11 +8,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.member.action.*;
+
+import net.store.action.*;
+import net.store.db.*;
 
 
-@WebServlet("/DominoMemberFrontController")
-public class DominoMemberFrontController extends HttpServlet {
+@WebServlet("/DominoStoreFrontAction")
+public class DominoStoreFrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,6 +31,8 @@ public class DominoMemberFrontController extends HttpServlet {
 
 	private void doProcess(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		
 		String RequestURI = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = RequestURI.substring(contextPath.length());
@@ -40,12 +44,69 @@ public class DominoMemberFrontController extends HttpServlet {
 		ActionForward forward = null;
 		Action action = null;
 
-		if(command.equals("/web.dominos.co.kr/global/Login.me")) {
+		if(command.equals("/web.dominos.co.kr/admin/AdminStoreList.st")) {
+			action = new DominoStoreList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreDetail.st")) {
+			action = new DominoStoreDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreAddView.st")) {
 			forward = new ActionForward();
 			forward.setRedirect(false);
-			forward.setPath("./login.jsp");
-			
+			forward.setPath("./adminStoreAddForm.jsp");
 		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreAddAction.st")) {
+			action = new DominoStoreAddAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreDelete.st")) {
+			action = new DominoStoreDelete();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreModifyView.st")) {
+			action = new DominoStoreModifyView();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreModifyAction.st")) {
+			action = new DominoStoreModifyAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		/*
 		else if(command.equals("/web.dominos.co.kr/global/Logout.me")) {
 			forward = new ActionForward();
 			forward.setRedirect(false);
@@ -97,58 +158,8 @@ public class DominoMemberFrontController extends HttpServlet {
 			}
 			
 		} 
+			
 		
-		else if (command.equals("/web.dominos.co.kr/member/MemberModifyForm.me")) {
-			action = new DominoMemberModifyView();
-			try {
-				forward = action.execute(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		} 
-		
-		else if (command.equals("/web.dominos.co.kr/member/MemberModifyAction.me")) {
-			action = new DominoMemberModifyAction();
-			try {
-				forward = action.execute(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		else if (command.equals("/web.dominos.co.kr/admin/AdminMemberList.me")) {
-			action = new DominoAdminMemberList();
-			try {
-				forward = action.execute(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		else if (command.equals("/web.dominos.co.kr/admin/AdminMemberDetail.me")) {
-			action = new DominoAdminMemberDetail();
-			try {
-				forward = action.execute(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		else if (command.equals("/web.dominos.co.kr/admin/AdminMemberDelete.me")) {
-			action = new DominoAdminMemberDelete();
-			try {
-				forward = action.execute(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-			
-		/*
 		
 		else if (command.equals("/JoinAction.me")) {
 			action = new DominoMemberJoinAction();
