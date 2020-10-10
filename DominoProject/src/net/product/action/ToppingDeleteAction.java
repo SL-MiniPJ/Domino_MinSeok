@@ -21,7 +21,7 @@ public class ToppingDeleteAction implements Action{
 
 			boolean result = false;
 
-			String code = request.getParameter("topping");
+			String code = request.getParameter("topping_code");
 
 			result = productDAO.DeleteTopping(code);
 

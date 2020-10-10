@@ -88,6 +88,204 @@ public class DominoBoardFrontController extends HttpServlet {
 		}
 		
 		
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminIssueList.bo")) {
+			action = new DominoAdminIssueList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminIssueDetail.bo")) {
+			action = new DominoAdminIssueDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminIssueWriteView.bo")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("./adminIssueWriteView.jsp");
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminIssueWriteAction.bo")) {
+			action = new DominoAdminIssueWriteAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		else if(command.equals("/web.dominos.co.kr/admin/AdminIssueDeleteAction.bo")) {
+			action = new DominoAdminIssueDeleteAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminEventList.bo")) {
+			action = new DominoAdminEventList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminEventWriteView.bo")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("./adminEventWriteView.jsp");
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminEventWriteAction.bo")) {
+			action = new DominoAdminEventWriteAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminEventDetail.bo")) {
+			action = new DominoAdminEventDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminEventDeleteAction.bo")) {
+			action = new DominoAdminEventDeleteAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminAllianceList.bo")) {
+			action = new DominoAdminAllianceList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminAllianceWriteView.bo")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("./adminAllianceWriteView.jsp");
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminAllianceWriteAction.bo")) {
+			action = new DominoAdminAllianceWriteAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminAllianceDetail.bo")) {
+			action = new DominoAdminAllianceDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/admin/AdminAllianceDeleteAction.bo")) {
+			action = new DominoAdminAllianceDeleteAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/event/UserEventList.bo")) {
+			action = new DominoUserEventList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/event/UserEventDetail.bo")) {
+			action = new DominoUserEventDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/event/UserAllianceList.bo")) {
+			action = new DominoUserAllianceList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/event/UserAllianceDetail.bo")) {
+			action = new DominoUserAllianceDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/bbs/UserNewsList.bo")) {
+			action = new DominoUserNewsList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/bbs/UserNewsDetail.bo")) {
+			action = new DominoUserNewsDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/bbs/UserIssueList.bo")) {
+			action = new DominoUserIssueList();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if(command.equals("/web.dominos.co.kr/bbs/UserIssueDetail.bo")) {
+			action = new DominoUserIssueDetail();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		/*
 		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreAddView.st")) {
 			forward = new ActionForward();

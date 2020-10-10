@@ -581,8 +581,8 @@ ul.menu li a {
 	display: block;
 	width: 100%;
 	height: 100%;
-	line-height: 48px; <!--
-	text-indent: 30px; -->
+	line-height: 48px;
+	<!--text-indent: 30px;-->
 	font-weight: bold;
 	color: #000;
 	text-decoration: none;
@@ -611,7 +611,8 @@ ul.menu:after {
 </style>
 			<div id="gnb" class="gnb-wrap">
 				<div class="gnb-inner">
-					<div id="container2" align="center" style="position: relative;">
+					<div id="container2" align="center"
+						style="position: relative;">
 
 
 						<ul class="menu">
@@ -635,9 +636,7 @@ ul.menu:after {
 								</ul></li>
 							<li><a href="#">판매량 통계</a>
 								<ul class="sub">
-									<li><a href="">연간통계</a></li>
-									<li><a href="">주간통계</a></li>
-									<li><a href="">일간통계</a></li>
+									<li><a href="./AdminMonthStatistic.pro">연간통계</a></li>
 								</ul></li>
 						</ul>
 					</div>
@@ -695,8 +694,8 @@ th {
 		ProductBean product = (ProductBean)list.get(i);
 %>
 			<tr>
-				<td></td>
-				<td><%=product.getTopping() %></td>
+				<td><%=product.getTopping_code() %></td>
+				<td><%=product.getTopping_name() %></td>
 				<td><%=product.getTopping_price() %></td>
 				<td></td>
 				<td></td>
@@ -707,7 +706,7 @@ th {
 				<td></td>
 				<td></td>
 				<td><a href="../../topping_image/<%=product.getTopping_image() %>"><%=product.getTopping_image() %></a></td>
-				<td><a href="./ToppingDeleteAction.pro?topping=<%=product.getTopping() %>">토핑 삭제</a></td>
+				<td><a href="./ToppingDeleteAction.pro?topping_code=<%=product.getTopping_code() %>">토핑 삭제</a></td>
 			</tr>
 <%
 	}

@@ -3,6 +3,8 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
+<%@ page import="net.board.db.*" %>
+<%@ page import="java.util.*" %>
 <%
 	// 관리자 계정이 아니면 접근할 수 없도록 메인페이지로 돌아가게한다.
 String idcheck = "";
@@ -637,9 +639,7 @@ ul.menu:after {
 								</ul></li>
 							<li><a href="#">판매량 통계</a>
 								<ul class="sub">
-									<li><a href="">연간통계</a></li>
-									<li><a href="">주간통계</a></li>
-									<li><a href="">일간통계</a></li>
+									<li><a href="./AdminMonthStatistic.pro">월간 통계</a></li>
 								</ul></li>
 						</ul>
 					</div>
@@ -648,12 +648,13 @@ ul.menu:after {
 			<!-- //main 1dep menu -->
 		</header>
 		<!-- //header -->
+		
 
 		<div id="container">
-			<section id="content">
-			
-				
-				
+			<section id="container">
+				<div class="page-title-wrap v2" style="text-align: center">
+					<h1 class="page-title" style="font-size: 36px; padding: 200px">관리자 페이지입니다.</h1>
+				</div>
 			</section>
 		</div>
 

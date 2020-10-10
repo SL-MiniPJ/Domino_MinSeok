@@ -38,11 +38,10 @@ public class ProductDAO {
 		int result3 = 0;
 		String sql1 = "INSERT INTO pizza VALUES (pizza_seq.NEXTVAL,?,?,?)";
 		String sql2 = "INSERT INTO nutrient_pizza VALUES "+
-						"((select max(pizza_code) from pizza),?,?,?,?,?,?,?,?)";
+				"((select max(pizza_code) from pizza),?,?,?,?,?,?,?,?)";
 		String sql3 = "INSERT INTO allergy_pizza VALUES ((select max(pizza_code) from pizza),?)";	
 
 		try {
-			System.out.println("addDao1");
 			// pizza
 			pstmt = conn.prepareStatement(sql1);
 
@@ -52,7 +51,6 @@ public class ProductDAO {
 
 			result1 = pstmt.executeUpdate();
 
-			System.out.println("addDao2");
 			// pizza 영양성분
 			pstmt = conn.prepareStatement(sql2);
 
@@ -67,7 +65,6 @@ public class ProductDAO {
 
 			result2 = pstmt.executeUpdate();
 
-			System.out.println("addDao3");
 			// pizza 알레르기
 			pstmt = conn.prepareStatement(sql3);
 
@@ -86,6 +83,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return false;
 	}
@@ -129,6 +127,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return null;
 	}
@@ -144,21 +143,18 @@ public class ProductDAO {
 		String sql3 = "Delete FROM pizza WHERE pizza_code=? ";
 
 		try{
-			System.out.println("DelDao1");
 			// nutrient_pizza 삭제
 			pstmt = conn.prepareStatement(sql1);
 			pstmt.setInt(1, code);
 
 			result1 = pstmt.executeUpdate();
 
-			System.out.println("DelDao2");
 			// allergy_pizza 삭제
 			pstmt = conn.prepareStatement(sql2);
 			pstmt.setInt(1, code);
 
 			result2 = pstmt.executeUpdate();
 
-			System.out.println("DelDao3");
 			// pizza 삭제
 			pstmt = conn.prepareStatement(sql3);
 			pstmt.setInt(1, code);
@@ -176,6 +172,7 @@ public class ProductDAO {
 		}finally{
 			try{
 				if(pstmt!=null) {pstmt.close();}}catch(Exception e) {}
+
 		}
 		return false;
 	}
@@ -189,7 +186,7 @@ public class ProductDAO {
 		int result3 = 0;
 		String sql1 = "INSERT INTO side VALUES (side_seq.NEXTVAL,?,?,?)";
 		String sql2 = "INSERT INTO nutrient_side VALUES "+
-						"((select max(side_code) from side),?,?,?,?,?,?)";
+				"((select max(side_code) from side),?,?,?,?,?,?)";
 		String sql3 = "INSERT INTO allergy_side VALUES ((select max(side_code) from side),?)";	
 
 		try {
@@ -232,6 +229,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return false;
 	}
@@ -273,6 +271,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return null;
 	}
@@ -288,21 +287,18 @@ public class ProductDAO {
 		String sql3 = "Delete FROM side WHERE side_code=? ";
 
 		try{
-			System.out.println("DelDao1");
 			// nutrient_pizza 삭제
 			pstmt = conn.prepareStatement(sql1);
 			pstmt.setInt(1, code);
 
 			result1 = pstmt.executeUpdate();
 
-			System.out.println("DelDao2");
 			// allergy_pizza 삭제
 			pstmt = conn.prepareStatement(sql2);
 			pstmt.setInt(1, code);
 
 			result2 = pstmt.executeUpdate();
 
-			System.out.println("DelDao3");
 			// pizza 삭제
 			pstmt = conn.prepareStatement(sql3);
 			pstmt.setInt(1, code);
@@ -320,6 +316,7 @@ public class ProductDAO {
 		}finally{
 			try{
 				if(pstmt!=null) {pstmt.close();}}catch(Exception e) {}
+
 		}
 		return false;
 	}
@@ -352,6 +349,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return false;
 	}
@@ -385,6 +383,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return null;
 	}
@@ -414,6 +413,7 @@ public class ProductDAO {
 		}finally{
 			try{
 				if(pstmt!=null) {pstmt.close();}}catch(Exception e) {}
+
 		}
 		return false;
 	}
@@ -424,13 +424,13 @@ public class ProductDAO {
 	public boolean addTopping(ProductBean product) {
 
 		int result1 = 0;
-		String sql1 = "INSERT INTO Topping VALUES (?,?,?)";
+		String sql1 = "INSERT INTO Topping VALUES (topping_seq.NEXTVAL,?,?,?)";
 
 		try {
 			// Topping
 			pstmt = conn.prepareStatement(sql1);
 
-			pstmt.setString(1,product.getTopping());
+			pstmt.setString(1,product.getTopping_name());
 			pstmt.setString(2,product.getTopping_image());
 			pstmt.setInt(3,product.getTopping_price());
 
@@ -447,6 +447,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return false;
 	}
@@ -454,9 +455,9 @@ public class ProductDAO {
 	// Topping 목록 보기 getToppingList
 	public List getToppingList() {
 
-		String sql = "SELECT p.topping, p.topping_price, p.topping_image "+
+		String sql = "SELECT p.topping_code, p.topping_name, p.topping_price, p.topping_image "+
 				"FROM topping p "+
-				"ORDER BY p.topping";
+				"ORDER BY p.topping_name";
 
 		List list = new ArrayList();
 
@@ -466,8 +467,9 @@ public class ProductDAO {
 
 			while(rs.next()){
 				ProductBean product = new ProductBean();
-
-				product.setTopping(rs.getString("topping"));
+				
+				product.setTopping_code(rs.getInt("topping_code"));
+				product.setTopping_name(rs.getString("topping_name"));
 				product.setTopping_price(rs.getInt("topping_price"));
 				product.setTopping_image(rs.getString("topping_image"));
 				list.add(product);
@@ -479,6 +481,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return null;
 	}
@@ -487,10 +490,9 @@ public class ProductDAO {
 	public boolean DeleteTopping(String code) {
 
 		int result1 = 0;
-		String sql1 = "Delete FROM topping WHERE topping=? ";
+		String sql1 = "Delete FROM topping WHERE topping_code=? ";
 
 		try{
-			System.out.println("DelDao1");
 			// nutrient_pizza 삭제
 			pstmt = conn.prepareStatement(sql1);
 			pstmt.setString(1, code);
@@ -508,6 +510,7 @@ public class ProductDAO {
 		}finally{
 			try{
 				if(pstmt!=null) {pstmt.close();}}catch(Exception e) {}
+
 		}
 		return false;
 	}
@@ -563,6 +566,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return false;
 	}
@@ -603,6 +607,7 @@ public class ProductDAO {
 		}finally{
 			if(rs!=null) try{rs.close();}catch(SQLException e){}
 			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
 		}
 		return null;
 	}
@@ -651,8 +656,247 @@ public class ProductDAO {
 		}finally{
 			try{
 				if(pstmt!=null) {pstmt.close();}}catch(Exception e) {}
+
 		}
 		return false;
 	}
 
+
+// 추가
+
+	// 피자 알레르기 getPizzaAllergy
+	public List getPizzaAllergy() {
+
+		String sql = "SELECT  p.pizza_name, a.ingredient "+
+				"FROM pizza p, allergy_pizza a "+
+				"WHERE p.pizza_code=a.pizza_code(+) "+
+				"ORDER BY p.pizza_code";
+
+		List list = new ArrayList();
+
+		try{
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				ProductBean product = new ProductBean();
+
+				product.setPizza_name(rs.getString("pizza_name"));
+				product.setIngredient(rs.getString("ingredient"));
+				list.add(product);
+			}
+
+			return list;
+		}catch(Exception e){
+			System.out.println("getPizzaAllergy 에러 : " + e);
+		}finally{
+			if(rs!=null) try{rs.close();}catch(SQLException e){}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
+		}
+		return null;
+	}
+
+	// 사이드 알레르기 getSideAllergy
+	public List getSideAllergy() {
+
+		String sql = "SELECT  p.side_name, a.ingredient "+
+				"FROM side p, allergy_side a "+
+				"WHERE p.side_code=a.side_code(+) "+
+				"ORDER BY p.side_code";
+
+		List list = new ArrayList();
+
+		try{
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				ProductBean product = new ProductBean();
+
+				product.setSide_name(rs.getString("side_name"));
+				product.setIngredient(rs.getString("ingredient"));
+				list.add(product);
+			}
+
+			return list;
+		}catch(Exception e){
+			System.out.println("getPizzaAllergy 에러 : " + e);
+		}finally{
+			if(rs!=null) try{rs.close();}catch(SQLException e){}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
+		}
+		return null;
+	}
+
+
+	// 음료/기타 알레르기 getOtherAllergy
+	public List getOtherAllergy() {
+
+		String sql = "SELECT  p.other_name, a.ingredient "+
+				"FROM other p, allergy_side a "+
+				"WHERE p.side_other=a.other_code(+) "+
+				"ORDER BY p.other_code";
+
+		List list = new ArrayList();
+
+		try{
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				ProductBean product = new ProductBean();
+
+				product.setOther_name(rs.getString("other_name"));
+				product.setIngredient(rs.getString("ingredient"));
+				list.add(product);
+			}
+
+			return list;
+		}catch(Exception e){
+			System.out.println("getPizzaAllergy 에러 : " + e);
+		}finally{
+			if(rs!=null) try{rs.close();}catch(SQLException e){}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e){}
+
+		}
+		return null;
+	}
+	
+	public ProductBean getPizzaDetail(int code) throws Exception {
+	      ProductBean bean = null;
+	      try {
+	         pstmt = conn.prepareStatement("select * from pizza where pizza_code = ?");
+	         pstmt.setInt(1, code);
+
+	         rs = pstmt.executeQuery();
+
+	         if (rs.next()) {
+	            bean = new ProductBean();
+	            bean.setPizza_code(rs.getInt("pizza_code"));
+	            bean.setPizza_image(rs.getString("pizza_image"));
+	            bean.setPizza_name(rs.getString("pizza_name"));
+	            bean.setPizza_price(rs.getInt("pizza_price"));
+	         }
+	         return bean;
+	      } catch (Exception ex) {
+	         System.out.println("getPizzaDetail 에러 : " + ex);
+	      } finally {
+	         if (rs != null)
+	            try {
+	               rs.close();
+	            } catch (SQLException ex) {
+	            }
+	         if (pstmt != null)
+	            try {
+	               pstmt.close();
+	            } catch (SQLException ex) {
+	            }
+
+	      }
+	      return null;
+	   }
+	
+	public List getMonthStatistic() throws Exception {
+	      StatisticBean bean = null;
+	      List list =  new ArrayList();
+	      try {
+	    	 
+	    	 String sql = "select extract(month from o.order_date) as month, o.pizza_code, p.pizza_name, count(*)"
+	    			 	+ " from user_order o, pizza p"
+	    			 	+ " where o.pizza_code = p.pizza_code"
+	    			 	+ " group by extract(month from o.order_date), o.pizza_code, p.pizza_name"
+	    			 	+ " order by extract(month from o.order_date), count(*) desc";
+	    	 
+	    	 
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         rs = pstmt.executeQuery();
+	         
+
+	         while (rs.next()) {
+	        	
+	            bean = new StatisticBean();
+	                        
+				
+				bean.setMonth(rs.getInt("month"));
+				bean.setPizza_code(rs.getInt("pizza_code"));
+				bean.setPizza_name(rs.getString("pizza_name"));
+				bean.setCount(rs.getInt("count(*)"));
+				list.add(bean);
+				 
+
+	         }
+	         System.out.println("getMonthStatistic 성공");
+	         return list;
+	         
+	      } catch (Exception ex) {
+	         System.out.println("getMonthStatistic 에러 : " + ex);
+	      } finally {
+	         if (rs != null)
+	            try {
+	               rs.close();
+	            } catch (SQLException ex) {
+	            }
+	         if (pstmt != null)
+	            try {
+	               pstmt.close();
+	            } catch (SQLException ex) {
+	            }
+	   }
+	      return null;
+	}
+	
+	public List getRank() throws Exception {
+	      ProductBean bean = null;
+	      List list =  new ArrayList();
+	      try {
+	    	 
+	    	 String sql = "select rownum list, pizza_name, pizza_image from"
+	    			 	+ " (select p.pizza_name, p.pizza_image, count(*)  from user_order o, pizza p"
+	    			 	+ " where o.pizza_code = p.pizza_code"
+	    			 	+ " group by p.pizza_name, p.pizza_image"
+	    			 	+ " order by count(*) desc) where rownum <=3";
+	    	 
+	    	 
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         rs = pstmt.executeQuery();
+	         
+
+	         while (rs.next()) {
+	        	
+	            bean = new ProductBean();
+	                        
+				bean.setPizza_name(rs.getString("pizza_name"));
+				bean.setPizza_image(rs.getString("pizza_image"));
+				list.add(bean);
+				 
+
+	         }
+	         System.out.println("getRank 성공");
+	         return list;
+	         
+	      } catch (Exception ex) {
+	         System.out.println("getRank 에러 : " + ex);
+	      } finally {
+	         if (rs != null)
+	            try {
+	               rs.close();
+	            } catch (SQLException ex) {
+	            }
+	         if (pstmt != null)
+	            try {
+	               pstmt.close();
+	            } catch (SQLException ex) {
+	            }
+
+	   }
+	
+	      return null;
+	
+	
+
+	}
 }

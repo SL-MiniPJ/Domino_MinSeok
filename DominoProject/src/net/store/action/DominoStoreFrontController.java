@@ -68,6 +68,12 @@ public class DominoStoreFrontController extends HttpServlet {
 			forward.setPath("./adminStoreAddForm.jsp");
 		}
 		
+		else if(command.equals("/web.dominos.co.kr/SearchStore.st")) {
+			forward = new ActionForward();
+			forward.setRedirect(false);
+			forward.setPath("./searchStore.jsp");
+		}
+		
 		else if(command.equals("/web.dominos.co.kr/admin/AdminStoreAddAction.st")) {
 			action = new DominoStoreAddAction();
 			try {

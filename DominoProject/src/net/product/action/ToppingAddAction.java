@@ -47,7 +47,7 @@ public class ToppingAddAction implements Action{
 			
 			int topping_price = Integer.parseInt(multi.getParameter("topping_price"));
 
-			productVO.setTopping(multi.getParameter("topping"));
+			productVO.setTopping_name(multi.getParameter("topping_name"));
 			productVO.setTopping_price(topping_price);
 			productVO.setTopping_image(multi.getFilesystemName((String)multi.getFileNames().nextElement()));
 

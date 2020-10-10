@@ -633,7 +633,7 @@ ul.menu:after {
 								</ul></li>
 							<li><a href="#">메뉴관리</a>
 								<ul class="sub">
-									<li><a href="./AdminPizzaAddForm.menu">피자 등록</a></li>
+									<li><a href="./Product.pro">메뉴 관리</a></li>
 								</ul></li>
 							<li><a href="#">관리자 게시판</a>
 								<ul class="sub">
@@ -645,9 +645,7 @@ ul.menu:after {
 								</ul></li>
 							<li><a href="#">판매량 통계</a>
 								<ul class="sub">
-									<li><a href="">연간통계</a></li>
-									<li><a href="">주간통계</a></li>
-									<li><a href="">일간통계</a></li>
+									<li><a href="./AdminMonthStatistic.pro">연간통계</a></li>
 								</ul></li>
 						</ul>
 					</div>

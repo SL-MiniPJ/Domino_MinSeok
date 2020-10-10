@@ -31,7 +31,7 @@ public class ToppingListAction implements Action{
 		// 전송 방식 = false : Forward 
 		forward.setRedirect(false);
 		// 접근 경로 지정
-		forward.setPath("topping_list.jsp");
+		forward.setPath("./topping_list.jsp");
 
 		return forward;
 	}

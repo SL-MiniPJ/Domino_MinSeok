@@ -1,6 +1,5 @@
 package net.product.db;
 
-
 public class ProductBean {
 
 	// 피자
@@ -22,7 +21,8 @@ public class ProductBean {
 	private String dough_image;
 
 	// 토핑
-	private String topping;
+	private int topping_code;
+	private String topping_name;
 	private int topping_price;
 	private String topping_image;
 
@@ -42,15 +42,17 @@ public class ProductBean {
 	private int salt;
 	private int sugars;
 
-	// 알러지 유발 성분
+	// 알레르기 유발 성분
 	private String ingredient;
 
 //////////////////////////////////////////////////////
 	
-	
-	
 	public int getPizza_code() {
 		return pizza_code;
+	}
+
+	public void setPizza_code(int pizza_code) {
+		this.pizza_code = pizza_code;
 	}
 
 	public int getPizza_price() {
@@ -59,42 +61,6 @@ public class ProductBean {
 
 	public void setPizza_price(int pizza_price) {
 		this.pizza_price = pizza_price;
-	}
-
-	public int getSide_price() {
-		return side_price;
-	}
-
-	public void setSide_price(int side_price) {
-		this.side_price = side_price;
-	}
-
-	public int getDough_price() {
-		return dough_price;
-	}
-
-	public void setDough_price(int dough_price) {
-		this.dough_price = dough_price;
-	}
-
-	public int getTopping_price() {
-		return topping_price;
-	}
-
-	public void setTopping_price(int topping_price) {
-		this.topping_price = topping_price;
-	}
-
-	public int getOther_price() {
-		return other_price;
-	}
-
-	public void setOther_price(int other_price) {
-		this.other_price = other_price;
-	}
-
-	public void setPizza_code(int pizza_code) {
-		this.pizza_code = pizza_code;
 	}
 
 	public String getPizza_name() {
@@ -121,6 +87,14 @@ public class ProductBean {
 		this.side_code = side_code;
 	}
 
+	public int getSide_price() {
+		return side_price;
+	}
+
+	public void setSide_price(int side_price) {
+		this.side_price = side_price;
+	}
+
 	public String getSide_name() {
 		return side_name;
 	}
@@ -145,6 +119,14 @@ public class ProductBean {
 		this.dough_code = dough_code;
 	}
 
+	public int getDough_price() {
+		return dough_price;
+	}
+
+	public void setDough_price(int dough_price) {
+		this.dough_price = dough_price;
+	}
+
 	public String getDough_name() {
 		return dough_name;
 	}
@@ -161,12 +143,28 @@ public class ProductBean {
 		this.dough_image = dough_image;
 	}
 
-	public String getTopping() {
-		return topping;
+	public int getTopping_code() {
+		return topping_code;
 	}
 
-	public void setTopping(String topping) {
-		this.topping = topping;
+	public void setTopping_code(int topping_code) {
+		this.topping_code = topping_code;
+	}
+
+	public String getTopping_name() {
+		return topping_name;
+	}
+
+	public void setTopping_name(String topping_name) {
+		this.topping_name = topping_name;
+	}
+
+	public int getTopping_price() {
+		return topping_price;
+	}
+
+	public void setTopping_price(int topping_price) {
+		this.topping_price = topping_price;
 	}
 
 	public String getTopping_image() {
@@ -183,6 +181,14 @@ public class ProductBean {
 
 	public void setOther_code(int other_code) {
 		this.other_code = other_code;
+	}
+
+	public int getOther_price() {
+		return other_price;
+	}
+
+	public void setOther_price(int other_price) {
+		this.other_price = other_price;
 	}
 
 	public String getOther_name() {

@@ -421,13 +421,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							<a href="goods/MenuListPizza.pro"><span>메뉴</span></a>
 						</li>
 						<li>
-							<a href="ecoupon/CouponList.co"><span>e-쿠폰</span></a>
+							<a href="ecoupon/CouponList.bo"><span>e-쿠폰</span></a>
 						</li>
 						<li>
-							<a href="voucher/VoucherList.vo"><span>상품권 선물</span></a>
+							<a href="voucher/list7f25.html"><span>상품권 선물</span></a>
 						</li>
 						<li>
-							<a href="event/EventList.ev"><span>이벤트&middot;제휴</span></a>
+							<a href="event/UserEventList.bo"><span>이벤트&middot;제휴</span></a>
 						</li>
 						<li>
 							<a href="SearchStore.st"><span>매장검색</span></a>
@@ -467,10 +467,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							</div>
 						</div>
 						<div class="notice-box">
-							<a href="bbs/newsList91ef.html?type=N">공지사항</a>
+							<a>공지사항</a>
 							<ul>
-								<li><a href="bbs/newsList91ef.html?type=N">도미노뉴스</a></li>
-								<li><a href="bbs/newsList0e42.html?type=P">보도자료</a></li>
+								<li><a href="bbs/UserNewsList.bo">도미노뉴스</a></li>
+								<li><a href="bbs/UserIssueList.bo">보도자료</a></li>
 							</ul>
 						</div>
 					</div>

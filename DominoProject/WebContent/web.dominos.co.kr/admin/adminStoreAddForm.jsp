@@ -631,63 +631,21 @@ ul.menu:after {
 								</ul></li>
 							<li><a href="#">메뉴관리</a>
 								<ul class="sub">
-									<li><a href="./AdminPizzaAddForm.menu">피자 등록</a></li>
+									<li><a href="./Product.pro">메뉴 관리</a></li>
 								</ul></li>
 							<li><a href="#">관리자 게시판</a>
 								<ul class="sub">
-									<li><a href="?page=board.jsp">게시글 작성</a></li>
+									<li><a href="./AdminNewsList.bo">뉴스 관리</a></li>
+									<li><a href="./AdminIssueList.bo">보도자료 관리</a></li>
+									<li><a href="./AdminEventList.bo">이벤트 관리</a></li>
+									<li><a href="./AdminAllianceList.bo">제휴 관리</a></li>
+									<li><a href="./AdminCouponList.bo">쿠폰 관리</a></li>
 								</ul></li>
-							<li><a href="#">판매량 통계</a>
+						<li><a href="#">판매량 통계</a>
 								<ul class="sub">
-									<li><a href="">연간통계</a></li>
-									<li><a href="">주간통계</a></li>
-									<li><a href="">일간통계</a></li>
+									<li><a href="./AdminMonthStatistic.pro">연간통계</a></li>
 								</ul></li>
 						</ul>
-					</div>
-					<a href="#" class="snb-more">더보기</a>
-				</div>
-
-				<div class="snb-wrap">
-					<div class="inner-box">
-						<div class="mnu-wrap">
-							<div class="mnu-box">
-								<a href="../event/mania.html">도미노 서비스</a>
-								<ul>
-									<li><a href="../event/mania.html">매니아 혜택</a></li>
-									<li><a href="../goods/dominosMoment.html">도미노 모멘트</a></li>
-									<li><a href="../quickOrder/index.html">퀵 오더</a></li>
-									<li><a href="../order/groupOrder.html">단체주문 서비스</a></li>
-								</ul>
-							</div>
-							<div class="mnu-box">
-								<a href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">고객센터</a>
-								<ul>
-									<li><a
-										href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">자주하는
-											질문</a></li>
-									<li><a href="../bbs/qnaForm.html">온라인 신문고</a></li>
-								</ul>
-							</div>
-							<div class="mnu-box">
-								<a href="../company/contents/overview.html">회사소개</a>
-								<ul>
-									<li><a href="../company/contents/overview.html">한국도미노피자</a></li>
-									<li><a href="../company/tvcfList.html">광고갤러리</a></li>
-									<li><a href="../company/contents/society.html">사회공헌활동</a></li>
-									<li><a href="../company/contents/chainstore1.html">가맹점
-											모집</a></li>
-									<li><a href="../company/jobListe3b0.html?type=R">인재채용</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="notice-box">
-							<a href="../bbs/newsList91ef.html?type=N">공지사항</a>
-							<ul>
-								<li><a href="../bbs/newsList91ef.html?type=N">도미노뉴스</a></li>
-								<li><a href="../bbs/newsList0e42.html?type=P">보도자료</a></li>
-							</ul>
-						</div>
 					</div>
 				</div>
 			</div>

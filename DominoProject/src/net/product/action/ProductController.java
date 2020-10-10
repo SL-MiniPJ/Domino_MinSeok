@@ -19,6 +19,8 @@ public class ProductController extends javax.servlet.http.HttpServlet implements
 
 		// 웹 페이지의 주소에서 다이나믹 웹 프로젝트 명 까지의 주소를 잘라내고 남은 것을 command에 저장.
 		String command = RequestURI.substring(contaxtPath.length());
+		
+		System.out.println("현재 주소 : " + RequestURI);
 
 		// 접근 경로 및 전송 방식을 전달할 용도
 		ActionForward forward  = null;
@@ -170,6 +172,7 @@ public class ProductController extends javax.servlet.http.HttpServlet implements
 		}
 		else if(command.equals("/web.dominos.co.kr/goods/MenuListPizza.pro")) {
 			// 메뉴 리스트 보기
+			System.out.println("MenuListPizza.pro 들어옴");
 			forward = new ActionForward();
 			forward.setRedirect(false);
 			forward.setPath("menuListPizza.jsp");
@@ -188,6 +191,32 @@ public class ProductController extends javax.servlet.http.HttpServlet implements
 			forward.setRedirect(false);
 			forward.setPath("menuListOther.jsp");
 		}
+		
+		else if(command.equals("/web.dominos.co.kr/goods/PizzaDetail.pro")) {
+			// 피자 상세
+			System.out.println("PizzaDetail.pro 들어옴");
+			action = new PizzaDetail();
+			try{
+				forward = action.execute(request, response);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		// 월별 통계 추가
+		else if(command.equals("/web.dominos.co.kr/admin/AdminMonthStatistic.pro")) {
+			// 메뉴 리스트 보기
+			System.out.println("AdminMonthStatistic.pro 들어옴");
+			action = new DominoAdminMonthStatistic();
+			try{
+				forward = action.execute(request, response);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
 	
 	
 

@@ -536,15 +536,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			<div id="gnb" class="gnb-wrap">
 				<div class="gnb-inner">
 					<ul>
-						<li class="active"><a href="../goods/MenuList.menu"><span>메뉴</span></a>
+						<li class="active">
+							<a href="../goods/MenuListPizza.pro"><span>메뉴</span></a>
 						</li>
-						<li><a href="../ecoupon/CouponList.co"><span>e-쿠폰</span></a>
+						<li>
+							<a href="../ecoupon/CouponList.bo"><span>e-쿠폰</span></a>
 						</li>
-						<li><a href="../voucher/VoucherList.vo"><span>상품권
-									선물</span></a></li>
-						<li><a href="../event/EventList.ev"><span>이벤트&middot;제휴</span></a>
+						<li>
+							<a href="../voucher/VoucherList.vo"><span>상품권 선물</span></a>
 						</li>
-						<li><a href="SearchStore.st"><span>매장검색</span></a></li>
+						<li>
+							<a href="../event/UserEventList.bo"><span>이벤트&middot;제휴</span></a>
+						</li>
+						<li>
+							<a href="SearchStore.st"><span>매장검색</span></a>
+						</li>
 					</ul>
 					<a href="#" class="snb-more">더보기</a>
 				</div>
@@ -585,8 +591,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 						<div class="notice-box">
 							<a href="../bbs/newsList91ef.html?type=N">공지사항</a>
 							<ul>
-								<li><a href="../bbs/newsList91ef.html?type=N">도미노뉴스</a></li>
-								<li><a href="../bbs/newsList0e42.html?type=P">보도자료</a></li>
+								<li><a href="../bbs/UserNewsList.bo">도미노뉴스</a></li>
+								<li><a href="../bbs/UserIssueList.bo">보도자료</a></li>
 							</ul>
 						</div>
 					</div>

@@ -415,13 +415,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							<a href="../goods/MenuListPizza.pro"><span>메뉴</span></a>
 						</li>
 						<li>
-							<a href="../ecoupon/CouponList.co"><span>e-쿠폰</span></a>
+							<a href="../ecoupon/CouponList.bo"><span>e-쿠폰</span></a>
 						</li>
 						<li>
 							<a href="../voucher/VoucherList.vo"><span>상품권 선물</span></a>
 						</li>
 						<li>
-							<a href="../event/EventList.ev"><span>이벤트&middot;제휴</span></a>
+							<a href="../event/UserEventList.bo"><span>이벤트&middot;제휴</span></a>
 						</li>
 						<li>
 							<a href="SearchStore.st"><span>매장검색</span></a>
@@ -429,7 +429,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					</ul>
 					<a href="#" class="snb-more">더보기</a>
 				</div>
-				
+
 				<div class="snb-wrap">
 					<div class="inner-box">
 						<div class="mnu-wrap">
@@ -445,7 +445,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							<div class="mnu-box">
 								<a href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">고객센터</a>
 								<ul>
-									<li><a href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">자주하는 질문</a></li>
+									<li><a
+										href="../bbs/faqList12ff.html?view_gubun=W&amp;bbs_cd=online">자주하는
+											질문</a></li>
 									<li><a href="../bbs/qnaForm.html">온라인 신문고</a></li>
 								</ul>
 							</div>
@@ -455,7 +457,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 									<li><a href="../company/contents/overview.html">한국도미노피자</a></li>
 									<li><a href="../company/tvcfList.html">광고갤러리</a></li>
 									<li><a href="../company/contents/society.html">사회공헌활동</a></li>
-									<li><a href="../company/contents/chainstore1.html">가맹점 모집</a></li>
+									<li><a href="../company/contents/chainstore1.html">가맹점
+											모집</a></li>
 									<li><a href="../company/jobListe3b0.html?type=R">인재채용</a></li>
 								</ul>
 							</div>
@@ -463,8 +466,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 						<div class="notice-box">
 							<a href="../bbs/newsList91ef.html?type=N">공지사항</a>
 							<ul>
-								<li><a href="../bbs/newsList91ef.html?type=N">도미노뉴스</a></li>
-								<li><a href="../bbs/newsList0e42.html?type=P">보도자료</a></li>
+								<li><a href="../bbs/UserNewsList.bo">도미노뉴스</a></li>
+								<li><a href="../bbs/UserIssueList.bo">보도자료</a></li>
 							</ul>
 						</div>
 					</div>

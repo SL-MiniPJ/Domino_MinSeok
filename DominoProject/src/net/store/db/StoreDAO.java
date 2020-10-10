@@ -227,5 +227,31 @@ public class StoreDAO {
 			}
 		return false;
 	}
+	
+	public StoreBean getStoreAddress(String store_name) throws Exception{
+        StoreBean bean = null;
+        try{
+           pstmt = con.prepareStatement(
+                 "select * from store where store_name = ?");
+           pstmt.setString(1, store_name);
+           
+           rs= pstmt.executeQuery();
+           
+           if(rs.next()){
+              bean = new StoreBean();
+              bean.setStore_address(rs.getString("store_address"));
+              bean.setStore_location(rs.getString("store_location"));
+              bean.setStore_name(rs.getString("store_name"));
+              
+           }
+           return bean;
+        }catch(Exception ex){
+           System.out.println("getStoreDetail ¿¡·¯ : " + ex);
+        }finally{
+           if(rs!=null)try{rs.close();}catch(SQLException ex){}
+           if(pstmt !=null)try{pstmt.close();}catch(SQLException ex){}
+        }
+        return null;
+     }
 
 }
